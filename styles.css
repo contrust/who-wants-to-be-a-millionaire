@@ -1,6 +1,6 @@
 #main{
     position: absolute;
-    background-image: url("img/background.jpg");
+    background-image: url("sources/images/background.jpg");
     min-width: 100%;
     min-height: 100vh;
     background-position: center; text-align: center;
@@ -34,7 +34,7 @@ body{
     top: 20px;
     left: 100px;
     height: 50px;
-    width: 100px;
+    width: 300px;
 }
 
 #Banswer{
@@ -42,7 +42,7 @@ body{
     top: 20px;
     right: 100px;
     height: 50px;
-    width: 100px;
+    width: 300px;
 }
 
 #Canswer{
@@ -50,7 +50,7 @@ body{
     bottom: 20px;
     left: 100px;
     height: 50px;
-    width: 100px;
+    width: 300px;
 }
 
 #Danswer{
@@ -58,6 +58,6 @@ body{
     bottom: 20px;
     right: 100px;
     height: 50px;
-    width: 100px;
+    width: 300px;
 }
 

@@ -9,10 +9,10 @@
     <div id="main">
         <button onclick="startGame()" id="startGame">Начать игру!</button>
         <div id="answers">
-        <button hidden id="Aanswer"> A Aboba</button>
-        <button hidden id="Banswer"> B Bebra</button>
-        <button hidden id="Canswer"> C Cyka</button>
-        <button hidden id="Danswer"> D DTrump</button>
+            <input hidden type="image" id="Aanswer" src="sources/images/black.png" onclick="ChooseAnswer('A')"/>
+            <input hidden type="image" id="Banswer" src="sources/images/black.png" onclick="ChooseAnswer('B')"/>
+            <input hidden type="image" id="Canswer" src="sources/images/black.png" onclick="ChooseAnswer('C')"/>
+            <input hidden type="image" id="Danswer" src="sources/images/black.png" onclick="ChooseAnswer('D')"/>
         </div>
     </div>
 </body>
@@ -23,6 +23,13 @@
         document.getElementById("Banswer").hidden = false;
         document.getElementById("Canswer").hidden = false;
         document.getElementById("Danswer").hidden = false;
+    }
+    let answerChosen = false;
+    function ChooseAnswer(letter){
+        if (!answerChosen) {
+            answerChosen = true;
+            document.getElementById(`${letter}answer`).src = "sources/images/orange.png";
+        }
     }
 </script>
 </html>
