@@ -7,7 +7,22 @@
 </head>
 <body>
     <div id="main">
-        <button id="startGame">Начать игру!</button>
+        <button onclick="startGame()" id="startGame">Начать игру!</button>
+        <div id="answers">
+        <button hidden id="Aanswer"> A Aboba</button>
+        <button hidden id="Banswer"> B Bebra</button>
+        <button hidden id="Canswer"> C Cyka</button>
+        <button hidden id="Danswer"> D DTrump</button>
+        </div>
     </div>
 </body>
+<script>
+    function startGame() {
+        document.getElementById("startGame").hidden = true;
+        document.getElementById("Aanswer").hidden = false;
+        document.getElementById("Banswer").hidden = false;
+        document.getElementById("Canswer").hidden = false;
+        document.getElementById("Danswer").hidden = false;
+    }
+</script>
 </html>
