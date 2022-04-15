@@ -1,3 +1,4 @@
+const score = document.querySelector("#score");
 const timer = document.querySelector("#timer");
 const question = document.querySelector("#question");
 const choices = [...document.querySelectorAll(".choice-text")];
@@ -7,7 +8,7 @@ let isAcceptingAnswers = true;
 let questionsCount = 0;
 let timeLeft = 30;
 let timerId = 0;
-let score = 0;
+let totalScore = 0;
 
 let questions = [
     {
@@ -24,7 +25,8 @@ let questions = [
 
 startGame = () => {
     questionsCount = 0;
-    score = 0;
+    totalScore = 0;
+    score.innerText = 0;
     getNewQuestion();
 }
 
@@ -38,7 +40,7 @@ function countdown() {
 }
 
 getNewQuestion = () => {
-    if (questionsCount >= 2)
+    if (questionsCount >= 10)
         return window.location.assign("end.html");
     timeLeft = 30;
     timer.innerText = 30;
@@ -56,14 +58,10 @@ choices.forEach(choice => {
    choice.addEventListener('click', event => {
        if (!isAcceptingAnswers) return;
        isAcceptingAnswers = false;
+       clearTimeout(timerId);
        const selectedChoice = event.target;
        const selectedAnswer = selectedChoice.dataset['number'];
        let status = selectedAnswer == currentQuestion.answer ? "correct" : "incorrect";
-
-       if (status === "correct"){
-           // popolnyaem score
-       }
-
        selectedChoice.parentElement.classList.add(status);
 
        setTimeout(() => {
@@ -74,6 +72,8 @@ choices.forEach(choice => {
                    return window.location.assign("end.html");
                }, 1000)
            } else {
+               totalScore += 10 + timeLeft;
+               score.innerText = totalScore;
                selectedChoice.parentElement.classList.remove(status);
                getNewQuestion();
            }
