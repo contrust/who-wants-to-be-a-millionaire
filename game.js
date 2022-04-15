@@ -31,9 +31,13 @@ startGame = () => {
 }
 
 function countdown() {
-    if (timeLeft === -1) {
+    if (timeLeft === 0) {
         clearTimeout(timerId);
-        return window.location.assign("end.html");
+        choices[currentQuestion.answer - 1].parentElement.classList.add("correct");
+        setTimeout(() =>
+        {
+            return window.location.assign("end.html");
+        }, 1000);
     } else {
         timer.innerText = --timeLeft;
     }
