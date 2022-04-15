@@ -1,9 +1,12 @@
+const timer = document.querySelector("#timer");
 const question = document.querySelector("#question");
 const choices = [...document.querySelectorAll(".choice-text")];
 
 let currentQuestion = null
 let isAcceptingAnswers = true;
 let questionsCount = 0;
+let timeLeft = 30;
+let timerId = 0;
 let score = 0;
 
 let questions = [
@@ -25,9 +28,21 @@ startGame = () => {
     getNewQuestion();
 }
 
+function countdown() {
+    if (timeLeft === -1) {
+        clearTimeout(timerId);
+        return window.location.assign("end.html");
+    } else {
+        timer.innerText = --timeLeft;
+    }
+}
+
 getNewQuestion = () => {
     if (questionsCount >= 2)
         return window.location.assign("end.html");
+    timeLeft = 30;
+    timer.innerText = 30;
+    timerId = setInterval(countdown, 1000);
     questionsCount++;
     currentQuestion = questions[Math.floor(Math.random() * 2)];
     question.innerText = currentQuestion.question;
