@@ -26,7 +26,7 @@ startGame = () => {
 }
 
 getNewQuestion = () => {
-    if (questionsCount > 2)
+    if (questionsCount >= 2)
         return window.location.assign("end.html");
     questionsCount++;
     currentQuestion = questions[Math.floor(Math.random() * 2)];
@@ -43,8 +43,7 @@ choices.forEach(choice => {
        isAcceptingAnswers = false;
        const selectedChoice = event.target;
        const selectedAnswer = selectedChoice.dataset['number'];
-
-       let status = selectedAnswer === currentQuestion.answer ? "correct" : "incorrect";
+       let status = selectedAnswer == currentQuestion.answer ? "correct" : "incorrect";
 
        if (status === "correct"){
            // popolnyaem score
@@ -53,8 +52,16 @@ choices.forEach(choice => {
        selectedChoice.parentElement.classList.add(status);
 
        setTimeout(() => {
-           selectedChoice.parentElement.classList.remove(status);
-           getNewQuestion();
+           if (status === "incorrect") {
+               choices[currentQuestion.answer - 1].parentElement.classList.add("correct");
+               setTimeout(() =>
+               {
+                   return window.location.assign("end.html");
+               }, 1000)
+           } else {
+               selectedChoice.parentElement.classList.remove(status);
+               getNewQuestion();
+           }
        }, 1000);
    })
 });
