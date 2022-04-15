@@ -1,0 +1,20 @@
+#main{
+    position: absolute;
+    background-image: url("img/background.jpg");
+    min-width: 100%;
+    min-height: 100vh;
+    background-position: center; text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body{
+    margin: 0;
+}
+
+#startGame{
+    height: 150px;
+    width: 350px;
+}
+
