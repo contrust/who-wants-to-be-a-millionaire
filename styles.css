@@ -1,8 +1,19 @@
 #main{
     position: absolute;
-    background-image: url("img/background.jpg");
+    background-image: url("sources/images/background.jpg");
     min-width: 100%;
     min-height: 100vh;
+    background-position: center; text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#answers{
+    position: absolute;
+    width: 50%;
+    height: 20%;
+    bottom: 50px;
     background-position: center; text-align: center;
     display: flex;
     align-items: center;
@@ -16,5 +27,37 @@ body{
 #startGame{
     height: 150px;
     width: 350px;
+}
+
+#Aanswer{
+    position: absolute;
+    top: 20px;
+    left: 100px;
+    height: 50px;
+    width: 300px;
+}
+
+#Banswer{
+    position: absolute;
+    top: 20px;
+    right: 100px;
+    height: 50px;
+    width: 300px;
+}
+
+#Canswer{
+    position: absolute;
+    bottom: 20px;
+    left: 100px;
+    height: 50px;
+    width: 300px;
+}
+
+#Danswer{
+    position: absolute;
+    bottom: 20px;
+    right: 100px;
+    height: 50px;
+    width: 300px;
 }
 

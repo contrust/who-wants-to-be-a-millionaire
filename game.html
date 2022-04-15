@@ -8,15 +8,27 @@
     <div id="game">
         <div id="timer"></div>
         <div id="hints"></div>
-        <div id="question">
-            <p>Question</p>
-            <div id="choices">
-                <div class="choice"></div>
-                <div class="choice"></div>
-                <div class="choice"></div>
-                <div class="choice"></div>
+        <div id="score"></div>
+        <div id="question"></div>
+        <div id="choices">
+            <div class="choice-container">
+                <div class="choice-index">A</div>
+                <div class="choice-text" data-number="1"></div>
+            </div>
+            <div class="choice-container">
+                <div class="choice-letter">B</div>
+                <div class="choice-text" data-number="2"></div>
+            </div>
+            <div class="choice-container">
+                <div class="choice-letter">C</div>
+                <div class="choice-text" data-number="3"></div>
+            </div>
+            <div class="choice-container">
+                <div class="choice-letter">D</div>
+                <div class="choice-text" data-number="4"></div>
             </div>
         </div>
     </div>
+    <script src="game.js"></script>
 </body>
 </html>
