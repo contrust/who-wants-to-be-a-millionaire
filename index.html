@@ -7,29 +7,14 @@
 </head>
 <body>
     <div id="main">
-        <button onclick="startGame()" id="startGame">Начать игру!</button>
+        <button id="startGame">Начать игру!</button>
         <div id="answers">
-            <input hidden type="image" id="Aanswer" src="sources/images/black.png" onclick="ChooseAnswer('A')"/>
-            <input hidden type="image" id="Banswer" src="sources/images/black.png" onclick="ChooseAnswer('B')"/>
-            <input hidden type="image" id="Canswer" src="sources/images/black.png" onclick="ChooseAnswer('C')"/>
-            <input hidden type="image" id="Danswer" src="sources/images/black.png" onclick="ChooseAnswer('D')"/>
+            <input hidden type="image" class='Answer' id="Aanswer" src="sources/images/black.png"/>
+            <input hidden type="image" class='Answer' id="Banswer" src="sources/images/black.png"/>
+            <input hidden type="image" class='Answer' id="Canswer" src="sources/images/black.png"/>
+            <input hidden type="image" class='Answer' id="Danswer" src="sources/images/black.png"/>
         </div>
     </div>
 </body>
-<script>
-    function startGame() {
-        document.getElementById("startGame").hidden = true;
-        document.getElementById("Aanswer").hidden = false;
-        document.getElementById("Banswer").hidden = false;
-        document.getElementById("Canswer").hidden = false;
-        document.getElementById("Danswer").hidden = false;
-    }
-    let answerChosen = false;
-    function ChooseAnswer(letter){
-        if (!answerChosen) {
-            answerChosen = true;
-            document.getElementById(`${letter}answer`).src = "sources/images/orange.png";
-        }
-    }
-</script>
+<script src="index.js"></script>
 </html>
