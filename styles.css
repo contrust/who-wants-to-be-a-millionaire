@@ -11,7 +11,7 @@
 
 #answers{
     position: absolute;
-    width: 50%;
+    width: 70%;
     height: 20%;
     bottom: 50px;
     background-position: center; text-align: center;
@@ -29,35 +29,28 @@ body{
     width: 350px;
 }
 
-#Aanswer{
+#Aanswer, #Banswer, #Canswer, #Danswer{
     position: absolute;
-    top: 20px;
-    left: 100px;
-    height: 50px;
-    width: 300px;
+    height: 30%;
+    width: 30%;
 }
 
-#Banswer{
-    position: absolute;
-    top: 20px;
-    right: 100px;
-    height: 50px;
-    width: 300px;
+#Aanswer {
+    top: 5%;
+    left: 15%;
 }
 
-#Canswer{
-    position: absolute;
-    bottom: 20px;
-    left: 100px;
-    height: 50px;
-    width: 300px;
+#Banswer {
+    top: 5%;
+    right: 15%;
 }
 
-#Danswer{
-    position: absolute;
-    bottom: 20px;
-    right: 100px;
-    height: 50px;
-    width: 300px;
+#Canswer {
+    bottom: 5%;
+    left: 15%;
 }
 
+#Danswer {
+    bottom: 5%;
+    right: 15%;
+}

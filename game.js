@@ -2,9 +2,13 @@ const score = document.querySelector("#score");
 const timer = document.querySelector("#timer");
 const question = document.querySelector("#question");
 const choices = [...document.querySelectorAll(".choice-text")];
+const fiftyFifty = document.querySelector("#fifty-fifty");
+const friendCall = document.querySelector("#friend-call");
 
 let currentQuestion = null
 let isAcceptingAnswers = true;
+let isFiftyFiftyActivated = false;
+let isFriendCallActivated = false;
 let questionsCount = 0;
 let timeLeft = 30;
 let timerId = 0;
@@ -27,6 +31,8 @@ startGame = () => {
     questionsCount = 0;
     totalScore = 0;
     score.innerText = 0;
+    isFiftyFiftyActivated = false;
+    isFriendCallActivated = false;
     getNewQuestion();
 }
 
@@ -84,5 +90,19 @@ choices.forEach(choice => {
        }, 1000);
    })
 });
+
+fiftyFifty.addEventListener('click', event => {
+    if (isFiftyFiftyActivated) return;
+    isFiftyFiftyActivated = true;
+    let secondRemainingAnswer = Math.floor(Math.random() * 4) + 1;
+    while (secondRemainingAnswer === currentQuestion.answer){
+        secondRemainingAnswer = Math.floor(Math.random() * 4) + 1;
+    }
+    choices.forEach(choice => {
+        if (choice.dataset['number'] != currentQuestion.answer && choice.dataset['number'] != secondRemainingAnswer){
+            choice.innerText = "";
+        }
+    })
+})
 
 startGame();
