@@ -1,6 +1,6 @@
 #main{
     position: absolute;
-    background-image: url("sources/images/background.jpg");
+    background-image: url("sources/images/background.png");
     min-width: 100%;
     min-height: 100vh;
     background-position: center; text-align: center;
