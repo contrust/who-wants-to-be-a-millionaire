@@ -34,6 +34,30 @@ body{
     height: 30%;
     width: 30%;
 }
+#AanswerText, #BanswerText, #CanswerText, #DanswerText{
+    position: absolute;
+    color: white;
+}
+
+#AanswerText{
+    top: 5%;
+    left: 25%;
+}
+
+#BanswerText{
+    top: 5%;
+    right: 25%;
+}
+
+#CanswerText{
+    bottom: 5%;
+    left: 25%;
+}
+
+#DanswerText{
+    bottom: 5%;
+    right: 25%;
+}
 
 #Aanswer {
     top: 5%;
