@@ -1,8 +1,13 @@
 const score = document.querySelector("#score");
 const timer = document.querySelector("#timer");
 const question = document.querySelector("#question");
+const questionText = document.querySelector("#questionText");
 const fiftyFifty = document.querySelector("#fifty-fifty");
 const friendCall = document.querySelector("#friend-call");
+const Aanswer = document.getElementById("Aanswer");
+const Banswer = document.getElementById("Banswer");
+const Canswer = document.getElementById("Canswer");
+const Danswer = document.getElementById("Danswer");
 let isFiftyFiftyActivated = false;
 let isFriendCallActivated = false;
 let questionsCount = 0;
@@ -171,46 +176,77 @@ function startGame() {
     document.getElementById("startGame").hidden = true;
     currentQuestionsSet = questionsData['questions'];
     currentQuestion= NextQuestion();
-    document.getElementById("Aanswer").hidden = false;
-    document.getElementById("Banswer").hidden = false;
-    document.getElementById("Canswer").hidden = false;
-    document.getElementById("Danswer").hidden = false;
+    Aanswer.hidden = false;
+    Banswer.hidden = false;
+    Canswer.hidden = false;
+    Danswer.hidden = false;
+    score.hidden = false;
+    timer.hidden = false;
+    question.hidden = false;
+    question.style.display = 'flex';
+    fiftyFifty.hidden = false;
+    friendCall.hidden = false;
     isFiftyFiftyActivated = false;
     isFriendCallActivated = false;
 }
 let answerChosen = false;
 function ChooseAnswer(letter){
     if (!answerChosen) {
+        clearTimeout(timerId);
         answerChosen = true;
         let chosenAnswer = document.getElementById(`${letter}answer`);
         let rightAnswer = document.getElementById(`${currentQuestion['answer']}answer`)
         chosenAnswer.src = "sources/images/orange.png";
+        let isCorrect = chosenAnswer.id === rightAnswer.id;
+        console.log(isCorrect);
+        console.log(chosenAnswer.textContent);
+        console.log(rightAnswer.textContent);
         setTimeout(() => {
             rightAnswer.src = "sources/images/green.png"
             setTimeout(() => {
                 chosenAnswer.src = "sources/images/black.png";
-                if(chosenAnswer !== rightAnswer)
+                if(!isCorrect)
                     rightAnswer.src = "sources/images/black.png";
-                currentQuestion = NextQuestion();
                 answerChosen = false;
+                if(isCorrect)
+                    currentQuestion = NextQuestion();
+                else
+                    window.location.assign('end.html');
             }, 2000)
         }, 3000);
+
     }
 }
 
 function NextQuestion(){
     const randomIdx = Math.floor(Math.random()*currentQuestionsSet.length)
-    const question = currentQuestionsSet[randomIdx];
+    const nextQuestion = currentQuestionsSet[randomIdx];
     currentQuestionsSet.splice(randomIdx, 1);
     let A = document.getElementById("AanswerText");
     let B = document.getElementById("BanswerText");
     let C = document.getElementById("CanswerText");
     let D = document.getElementById("DanswerText");
-    A.textContent = `A${'\u00A0'.repeat(3)}${question['choices'][0]}`;
-    B.textContent = `B${'\u00A0'.repeat(3)}${question['choices'][1]}`;
-    C.textContent = `C${'\u00A0'.repeat(3)}${question['choices'][2]}`;
-    D.textContent = `D${'\u00A0'.repeat(3)}${question['choices'][3]}`;
-    return question;
+    questionText.textContent = nextQuestion['question'];
+    A.textContent = `A${'\u00A0'.repeat(3)}${nextQuestion['choices'][0]}`;
+    B.textContent = `B${'\u00A0'.repeat(3)}${nextQuestion['choices'][1]}`;
+    C.textContent = `C${'\u00A0'.repeat(3)}${nextQuestion['choices'][2]}`;
+    D.textContent = `D${'\u00A0'.repeat(3)}${nextQuestion['choices'][3]}`;
+    timeLeft = 30;
+    timer.innerText = 30;
+    timerId = setInterval(countdown, 1000);
+    return nextQuestion;
+}
+
+function countdown() {
+    if (timeLeft === 0) {
+        clearTimeout(timerId);
+        setTimeout(() =>
+        {
+            return window.location.assign("end.html");
+        }, 1000);
+    } else {
+        timer.innerText = --timeLeft;
+    }
 }
 
 

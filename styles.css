@@ -9,6 +9,25 @@
     justify-content: center;
 }
 
+#question{
+    position: absolute;
+    width: 70%;
+    height: 10%;
+    bottom: 230px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-image: url("sources/images/quest.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+#questionText{
+    color: white;
+    align-items: center;
+    width: 60%;
+}
+
 #answers{
     position: absolute;
     width: 70%;
@@ -18,6 +37,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#timer{
+    background-color: white;
+}
+
+#score{
+    background-color: white;
+}
+
+#hints{
+    background-color: white;
 }
 
 body{
