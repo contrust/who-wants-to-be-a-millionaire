@@ -41,22 +41,22 @@ body{
 
 #AanswerText{
     top: 5%;
-    left: 25%;
+    left: 18%;
 }
 
 #BanswerText{
     top: 5%;
-    right: 25%;
+    left: 58%;
 }
 
-#CanswerText{
+#CanswerText {
     bottom: 5%;
-    left: 25%;
+    left: 18%;
 }
 
 #DanswerText{
     bottom: 5%;
-    right: 25%;
+    left: 58%;
 }
 
 #Aanswer {
