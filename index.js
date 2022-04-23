@@ -208,8 +208,11 @@ function ChooseAnswer(letter){
                 if(!isCorrect)
                     rightAnswer.src = "sources/images/black.png";
                 answerChosen = false;
-                if(isCorrect)
+                if(isCorrect){
+                    totalScore += 10+timeLeft;
+                    score.innerText = `Score: ${totalScore}`;
                     currentQuestion = NextQuestion();
+                }
                 else
                     window.location.assign('end.html');
             }, 2000)
