@@ -1,0 +1,110 @@
+#main{
+    position: absolute;
+    background-image: url("../images/background.png");
+    min-width: 100%;
+    min-height: 100vh;
+    background-position: center; text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#question{
+    position: absolute;
+    width: 70%;
+    height: 10%;
+    bottom: 250px;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../images/quest.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+#questionText{
+    color: white;
+    align-items: center;
+    width: 60%;
+}
+
+#answers{
+    position: absolute;
+    width: 70%;
+    height: 20%;
+    bottom: 50px;
+    background-position: center; text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#timer{
+    background-color: white;
+}
+
+#score{
+    background-color: white;
+}
+
+#hints{
+    background-color: white;
+}
+
+body{
+    margin: 0;
+}
+
+#startGame{
+    height: 150px;
+    width: 350px;
+}
+
+#Aanswer, #Banswer, #Canswer, #Danswer{
+    position: absolute;
+    height: 30%;
+    width: 30%;
+}
+#AanswerText, #BanswerText, #CanswerText, #DanswerText{
+    position: absolute;
+    color: white;
+}
+
+#AanswerText{
+    top: 5%;
+    left: 18%;
+}
+
+#BanswerText{
+    top: 5%;
+    left: 58%;
+}
+
+#CanswerText {
+    bottom: 5%;
+    left: 18%;
+}
+
+#DanswerText{
+    bottom: 5%;
+    left: 58%;
+}
+
+#Aanswer {
+    top: 5%;
+    left: 15%;
+}
+
+#Banswer {
+    top: 5%;
+    right: 15%;
+}
+
+#Canswer {
+    bottom: 5%;
+    left: 15%;
+}
+
+#Danswer {
+    bottom: 5%;
+    right: 15%;
+}
