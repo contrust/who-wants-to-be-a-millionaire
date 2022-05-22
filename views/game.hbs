@@ -7,14 +7,22 @@
 <div id="question">
     <p id="questionText">{{question}}</p>
 </div>
-<div id="answers">
-    <input type="image" class='Answer' id="Aanswer" src="/static/images/black.png"/>
-    <p id="AanswerText">{{A}}</p>
-    <input type="image" class='Answer' id="Banswer" src="/static/images/black.png"/>
-    <p id="BanswerText">{{B}}</p>
-    <input type="image" class='Answer' id="Canswer" src="/static/images/black.png"/>
-    <p id="CanswerText">{{C}}</p>
-    <input type="image" class='Answer' id="Danswer" src="/static/images/black.png"/>
-    <p id="DanswerText">{{D}}</p>
-</div>
+<form id="answers" method="post">
+    <button id="A" class='Answer' name="answer" value="A">
+        <img id="Aanswer" src="/static/images/black.png">
+        <p id="AanswerText">{{A}}</p>
+    </button>
+    <button id="B" class='Answer'  name="answer"  value="B">
+        <img id="Banswer" src="/static/images/black.png">
+        <p id="BanswerText">{{B}}</p>
+    </button>
+    <button id="C" class='Answer' name="answer" src="/static/images/black.png" value="C">
+        <img id="Canswer" src="/static/images/black.png">
+        <p id="CanswerText">{{C}}</p>
+    </button>
+    <button id="D" class='Answer' name="answer" src="/static/images/black.png" value="D">
+        <img id="Danswer" src="/static/images/black.png">
+        <p id="DanswerText">{{D}}</p>
+    </button>
+</form>
 <script src="static/js/game.js"></script>

@@ -1,9 +1,12 @@
-import express from "express";
-import hbs from "express-handlebars";
-import path from "path";
-import cookieParser from "cookie-parser";
-import fs from "fs";
+const express = require("express");
+const hbs = require("express-handlebars");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const fs =require("fs");
+const bodyParser = require("body-parser");
 
+
+const answerTimeout = 5000;
 let questionsData;
 let readQuestionsPromise = new Promise(
     function (resolve, reject){
@@ -46,8 +49,7 @@ app.engine(
 
 app.use('/static', express.static('static'));
 app.use(cookieParser());
-
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (_, res) => {
     res.redirect('/start');
 });
@@ -79,8 +81,19 @@ app.get("/game", (_, res) => {
     });
 });
 
-app.post("/game", (_, res) => {
-    res.redirect("/game");
+app.post("/game", (req, res) => {
+    setTimeout(function(){
+        const answer = req.body.answer;
+        if(answer === currentQuestion["answer"]){
+            currentQuestion = NextQuestion();
+            res.redirect("/game")
+        }
+        else {
+            res.redirect("/leaderboard")
+        }
+
+    }, answerTimeout);
+
 });
 
 app.post("/game", (_, res) => {

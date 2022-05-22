@@ -42,6 +42,6 @@ function CheckAnswer(letter){
 let rightAnswer = getCookie("rightAnswer");
 console.log(rightAnswer);
 document.addEventListener('click', event => {
-    if(event.target.classList.contains("Answer"))
-        CheckAnswer(event.target.id[0])
+    if(event.target.id.includes("answer"))
+        CheckAnswer(event.target.id[0]);
 })

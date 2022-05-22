@@ -59,6 +59,11 @@ body{
     width: 350px;
 }
 
+#A, #B, #C, #D{
+    background: transparent;
+    border: none;
+}
+
 #Aanswer, #Banswer, #Canswer, #Danswer{
     position: absolute;
     height: 30%;
