@@ -55,6 +55,7 @@ app.get("/", (_, res) => {
 });
 
 app.get("/start", (_, res) => {
+    score = 0;
     res.render("start", {
         layout: "default",
         title: "Start"
@@ -86,6 +87,7 @@ app.post("/game", (req, res) => {
         const answer = req.body.answer;
         if(answer === currentQuestion["answer"]){
             currentQuestion = NextQuestion();
+            score =score+  10 + Number(req.cookies.time);
             res.redirect("/game")
         }
         else {
@@ -103,6 +105,7 @@ app.get("/leaderboard", (_, res) => {
     res.render("leaderboard", {
         layout: "default",
         title: "Leaderboard",
+        score: score,
     });
 });
 
