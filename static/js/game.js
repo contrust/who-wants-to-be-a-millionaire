@@ -5,6 +5,7 @@ const answerCText = document.getElementById('CanswerText');
 const answerDText = document.getElementById('DanswerText');
 const scoreText = document.getElementById('score');
 const timer = document.getElementById('timer');
+const friendCall = document.getElementById('friend-call');
 const timeForAnswer = 30;
 const totalHighlightTime = 5000;
 const orangeHighlightTime = 3000;
@@ -19,15 +20,17 @@ let score = 0;
 
 
 document.addEventListener('click', event => {
-    if(["A", "B", "C", "D"].includes(event.target.id))
+    if (["A", "B", "C", "D"].includes(event.target.id))
         checkAnswer(event.target.id);
-})
+    else if (event.target.id === 'friend-call') {
+        window.location.replace("http://localhost:3000/api/getFriendCallAnswer");
+    }
+});
 getNextQuestion();
 
 
-function checkAnswer(letter){
-    if(answerChosen)
-        return;
+function checkAnswer(letter) {
+    if (answerChosen) return;
     clearTimeout(timerId);
     answerChosen = true;
     let chosenAnswerButton = document.getElementById(`${letter}`);
@@ -35,21 +38,20 @@ function checkAnswer(letter){
     let isCorrect = chosenAnswerButton.id === rightAnswerButton.id;
     highlightAnswers(rightAnswerButton, chosenAnswerButton);
     setTimeout(() => {
-        if(isCorrect){
+        if (isCorrect) {
             getNextQuestion();
             score = score + 10 + timeLeft;
             scoreText.innerText = score;
             resetTimer();
             answerChosen = false;
-        }
-        else {
+        } else {
             endGame();
         }
     }, totalHighlightTime);
 
 }
 
-function getNextQuestion(){
+function getNextQuestion() {
     fetch("/api/getNextQuestion").then((res) => {
             return res.json();
         }
@@ -63,7 +65,7 @@ function getNextQuestion(){
     });
 }
 
-function highlightAnswers(rightAnswerButton, chosenAnswerButton){
+function highlightAnswers(rightAnswerButton, chosenAnswerButton) {
     chosenAnswerButton.src = "static/images/orange.png";
     setTimeout(() => {
         rightAnswerButton.src = "static/images/green.png"
@@ -77,8 +79,7 @@ function highlightAnswers(rightAnswerButton, chosenAnswerButton){
 function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
-        setTimeout(() =>
-        {
+        setTimeout(() => {
             return window.location.assign("end.html");
         }, 1000);
     } else {
@@ -87,13 +88,13 @@ function countdown() {
     }
 }
 
-function resetTimer(){
+function resetTimer() {
     timeLeft = timeForAnswer;
     timer.innerText = timeLeft
     timerId = setInterval(countdown, 1000);
 }
 
-function endGame(){
+function endGame() {
     {
         console.log(JSON.stringify({"score": score}));
         fetch('/api/sendScore', {
