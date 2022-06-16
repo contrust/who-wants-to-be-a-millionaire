@@ -7,6 +7,7 @@ const session = require("express-session");
 const questionsFilePath = './static/questions/questions.json';
 const leaderboardPath = './static/leaderboard/leaderboard.json'
 const rootDir = process.cwd();
+const leaderboardSize = 10;
 const port = 3000;
 
 let questionsData = require(questionsFilePath);
@@ -68,13 +69,15 @@ app.get("/gameOver", (req, res) =>{
     })
 })
 
+
 app.get("/leaderboard", (req, res) => {
     res.render("leaderboard", {
         layout: "default",
         title: "leaderboard",
-        items: Object.values(leaderboard),
+        items: Object.values(leaderboard).sort((a, b) => b.score - a.score).slice(0, leaderboardSize),
     });
 });
+
 
 app.get("/api/getNextQuestion", (req, res) => {
     res.json(getNextQuestion(req.session));
