@@ -3,26 +3,27 @@
     <div id="fifty-fifty">50/50</div>
     <div id="friend-call">Call friend</div>
 </div>
-<div id="score">Score: {{score}}</div>
+<div id="score">Score: 0</div>
 <div id="question">
-    <p id="questionText">{{question}}</p>
+    <p id="questionText"></p>
 </div>
-<form id="answers" method="post">
+<div id="answers">
     <button id="A" class='Answer' name="answer" value="A">
         <img id="Aanswer" src="/static/images/black.png">
-        <p id="AanswerText">{{A}}</p>
+        <p id="AanswerText"></p>
     </button>
     <button id="B" class='Answer'  name="answer"  value="B">
         <img id="Banswer" src="/static/images/black.png">
-        <p id="BanswerText">{{B}}</p>
+        <p id="BanswerText"></p>
     </button>
     <button id="C" class='Answer' name="answer" src="/static/images/black.png" value="C">
         <img id="Canswer" src="/static/images/black.png">
-        <p id="CanswerText">{{C}}</p>
+        <p id="CanswerText"></p>
     </button>
     <button id="D" class='Answer' name="answer" src="/static/images/black.png" value="D">
         <img id="Danswer" src="/static/images/black.png">
-        <p id="DanswerText">{{D}}</p>
+        <p id="DanswerText"></p>
     </button>
-</form>
+</div>
+
 <script src="static/js/game.js"></script>

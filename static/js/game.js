@@ -1,11 +1,73 @@
+const questionText = document.getElementById('questionText');
+const answerAText = document.getElementById('AanswerText');
+const answerBText = document.getElementById('BanswerText');
+const answerCText = document.getElementById('CanswerText');
+const answerDText = document.getElementById('DanswerText');
+const scoreText = document.getElementById('score');
+let rightAnswer = undefined;
+const timeForAnswer = 30;
+let timeLeft = timeForAnswer;
+const timer = document.getElementById('timer');
+let timerId = setInterval(countdown, 1000);
+timer.innerText = `${timeForAnswer}`;
 let answerChosen = false;
-const timer = document.querySelector("#timer");
+let score = 0;
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    console.log(document.cookie);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+
+document.addEventListener('click', event => {
+    if(event.target.id.includes("answer"))
+        checkAnswer(event.target.id[0]);
+})
+GetNextQuestion();
+
+
+function checkAnswer(letter){
+    if(answerChosen)
+        return;
+    clearTimeout(timerId);
+    answerChosen = true;
+    let chosenAnswerButton = document.getElementById(`${letter}answer`);
+    let rightAnswerButton = document.getElementById(`${rightAnswer}answer`);
+    let isCorrect = chosenAnswerButton.id === rightAnswerButton.id;
+    highlightAnswers(rightAnswerButton, chosenAnswerButton);
+    setTimeout(() => {
+        if(isCorrect){
+            GetNextQuestion();
+            score = score + 10 + timeLeft;
+            scoreText.innerText = score;
+            resetTimer();
+            answerChosen = false;
+        }
+        else {
+            return window.location.assign('end.html');
+        }
+    }, 5000);
+
+}
+
+function GetNextQuestion(){
+    fetch("/api/getNextQuestion").then((res) => {
+            return res.json();
+        }
+    ).then((questionData) => {
+        questionText.innerText = questionData['question'];
+        answerAText.innerText = questionData['choices'][0];
+        answerBText.innerText = questionData['choices'][1];
+        answerCText.innerText = questionData['choices'][2];
+        answerDText.innerText = questionData['choices'][3];
+        rightAnswer = questionData['answer'];
+    });
+}
+
+function highlightAnswers(rightAnswerButton, chosenAnswerButton){
+    chosenAnswerButton.src = "static/images/orange.png";
+    setTimeout(() => {
+        rightAnswerButton.src = "static/images/green.png"
+        setTimeout(() => {
+            chosenAnswerButton.src = "static/images/black.png";
+            rightAnswerButton.src = "static/images/black.png";
+        }, 2000)
+    }, 3000);
 }
 
 function countdown() {
@@ -16,62 +78,13 @@ function countdown() {
             return window.location.assign("end.html");
         }, 1000);
     } else {
-        timer.innerText = --timeLeft;
-        setCookie('time', timeLeft)
-    }
-}
-
-function CheckAnswer(letter){
-    if (!answerChosen) {
-        clearTimeout(timerId);
-        answerChosen = true;
-        let chosenAnswer = document.getElementById(`${letter}answer`);
-        let rightAnswerButton = document.getElementById(`${rightAnswer}answer`)
-        chosenAnswer.src = "static/images/orange.png";
-        let isCorrect = chosenAnswer.id === rightAnswerButton.id;
-        setTimeout(() => {
-            rightAnswerButton.src = "static/images/green.png"
-            setTimeout(() => {
-                chosenAnswer.src = "static/images/black.png";
-                if(!isCorrect)
-                    rightAnswerButton.src = "static/images/black.png";
-                answerChosen = false;
-            }, 2000)
-        }, 3000);
+        timer.innerText = `${--timeLeft}`;
 
     }
 }
 
-let rightAnswer = getCookie("rightAnswer");
-console.log(rightAnswer);
-document.addEventListener('click', event => {
-    if(event.target.id.includes("answer"))
-        CheckAnswer(event.target.id[0]);
-})
-timeLeft = 30;
-timerId = setInterval(countdown, 1000);
-
-function setCookie(name, value, options = {}) {
-
-    options = {
-        path: '/',
-        // при необходимости добавьте другие значения по умолчанию
-        ...options
-    };
-
-    if (options.expires instanceof Date) {
-        options.expires = options.expires.toUTCString();
-    }
-
-    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-    for (let optionKey in options) {
-        updatedCookie += "; " + optionKey;
-        let optionValue = options[optionKey];
-        if (optionValue !== true) {
-            updatedCookie += "=" + optionValue;
-        }
-    }
-
-    document.cookie = updatedCookie;
+function resetTimer(){
+    timeLeft = timeForAnswer;
+    timer.innerText = timeLeft
+    timerId = setInterval(countdown, 1000);
 }
