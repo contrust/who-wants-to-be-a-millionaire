@@ -59,12 +59,12 @@ body{
     width: 350px;
 }
 
-#A, #B, #C, #D{
+#AButton, #BButton, #CButton, #DButton{
     background: transparent;
     border: none;
 }
 
-#Aanswer, #Banswer, #Canswer, #Danswer{
+#A, #B, #C, #D{
     position: absolute;
     height: 30%;
     width: 30%;
@@ -94,22 +94,22 @@ body{
     left: 58%;
 }
 
-#Aanswer {
+#A {
     top: 5%;
     left: 15%;
 }
 
-#Banswer {
+#B {
     top: 5%;
     right: 15%;
 }
 
-#Canswer {
+#C {
     bottom: 5%;
     left: 15%;
 }
 
-#Danswer {
+#D {
     bottom: 5%;
     right: 15%;
 }

@@ -4,10 +4,14 @@ const answerBText = document.getElementById('BanswerText');
 const answerCText = document.getElementById('CanswerText');
 const answerDText = document.getElementById('DanswerText');
 const scoreText = document.getElementById('score');
-let rightAnswer = undefined;
-const timeForAnswer = 30;
-let timeLeft = timeForAnswer;
 const timer = document.getElementById('timer');
+const timeForAnswer = 30;
+const totalHighlightTime = 5000;
+const orangeHighlightTime = 3000;
+const greenHighlightTime = totalHighlightTime - orangeHighlightTime;
+
+let rightAnswer = undefined;
+let timeLeft = timeForAnswer;
 let timerId = setInterval(countdown, 1000);
 timer.innerText = `${timeForAnswer}`;
 let answerChosen = false;
@@ -15,8 +19,8 @@ let score = 0;
 
 
 document.addEventListener('click', event => {
-    if(["Aanswer", "Banswer", "Canswer", "Danswer"].includes(event.target.id))
-        checkAnswer(event.target.id[0]);
+    if(["A", "B", "C", "D"].includes(event.target.id))
+        checkAnswer(event.target.id);
 })
 GetNextQuestion();
 
@@ -26,8 +30,8 @@ function checkAnswer(letter){
         return;
     clearTimeout(timerId);
     answerChosen = true;
-    let chosenAnswerButton = document.getElementById(`${letter}answer`);
-    let rightAnswerButton = document.getElementById(`${rightAnswer}answer`);
+    let chosenAnswerButton = document.getElementById(`${letter}`);
+    let rightAnswerButton = document.getElementById(`${rightAnswer}`);
     let isCorrect = chosenAnswerButton.id === rightAnswerButton.id;
     highlightAnswers(rightAnswerButton, chosenAnswerButton);
     setTimeout(() => {
@@ -41,7 +45,7 @@ function checkAnswer(letter){
         else {
             return window.location.assign('end.html');
         }
-    }, 5000);
+    }, totalHighlightTime);
 
 }
 
@@ -66,8 +70,8 @@ function highlightAnswers(rightAnswerButton, chosenAnswerButton){
         setTimeout(() => {
             chosenAnswerButton.src = "static/images/black.png";
             rightAnswerButton.src = "static/images/black.png";
-        }, 2000)
-    }, 3000);
+        }, greenHighlightTime)
+    }, orangeHighlightTime);
 }
 
 function countdown() {

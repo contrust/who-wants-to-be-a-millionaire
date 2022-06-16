@@ -6,7 +6,6 @@ const fs = require("fs");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
-const answerTimeout = 5000;
 const rootDir = process.cwd();
 const port = 3000;
 
@@ -80,19 +79,6 @@ app.get("/game", (req, res) => {
     });
 });
 
-app.post("/game", (req, res) => {
-    setTimeout(function(){
-        const answer = req.body.answer;
-        if(answer === req.session.currentQuestion["answer"]){
-            req.session.currentQuestion = GetNextQuestion(req.session);
-            req.session.score =req.session.score+  10 + Number(req.cookies.time);
-            res.redirect("/game")
-        }
-        else {
-            res.redirect("/leaderboard")
-        }
-    }, answerTimeout);
-});
 
 app.get("/leaderboard", (req, res) => {
     res.render("leaderboard", {
