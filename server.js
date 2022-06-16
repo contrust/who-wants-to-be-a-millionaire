@@ -1,34 +1,16 @@
 const express = require("express");
 const hbs = require("express-handlebars");
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-
+const questionsFilePath = './static/questions/questions.json';
+const leaderboardPath = './static/leaderboard/leaderboard.json'
 const rootDir = process.cwd();
 const port = 3000;
 
-let questionsData;
-
-
-const readQuestionsPromise = new Promise(
-    function (resolve){
-        fs.readFile('static/questions/questions.json', (err, data) => {
-            if (err) throw err;
-            resolve(JSON.parse(data));
-        })})
-
-readQuestionsPromise.then(function(data) {
-    questionsData = data;
-})
-
-function GetNextQuestion(session){
-    const randomIdx = Math.floor(Math.random()*session.currentQuestionsSet.length)
-    const nextQuestion = session.currentQuestionsSet[randomIdx];
-    session.currentQuestionsSet.splice(randomIdx, 1);
-    return nextQuestion;
-}
+let questionsData = require(questionsFilePath);
+let leaderboard = require(leaderboardPath);
 
 
 const app = express();
@@ -44,14 +26,17 @@ app.engine(
     })
 );
 
+
+
 app.use('/static', express.static('static'));
 app.use(session({
     resave: false,
     saveUninitialized: false,
     secret: "asdfunmmc",
 }));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.get("/", (_, res) => {
     res.redirect('/start');
 });
@@ -64,36 +49,75 @@ app.get("/start", (_, res) => {
 });
 
 app.post("/start", (req, res) => {
-    req.session.score = 0;
-    req.session.questionCount = 1;
-    req.session.currentQuestionsSet = questionsData['questions']
-    req.session.currentQuestion = GetNextQuestion(req.session);
+    initializeNewGame(req);
     res.redirect("/game");
 });
 
 app.get("/game", (req, res) => {
-    res.cookie("rightAnswer", req.session.currentQuestion["answer"]);
     res.render("game", {
         layout: "default",
         title: "Game",
     });
 });
 
+app.get("/gameOver", (req, res) =>{
+    res.render("gameOver", {
+        layout: "default",
+        title: "Game Over",
+        score: req.session.score,
+    })
+})
 
 app.get("/leaderboard", (req, res) => {
     res.render("leaderboard", {
         layout: "default",
-        title: "Leaderboard",
-        score: req.session.score,
+        title: "leaderboard",
+        items: Object.values(leaderboard),
     });
 });
 
 app.get("/api/getNextQuestion", (req, res) => {
-    res.json(GetNextQuestion(req.session));
-})
+    res.json(getNextQuestion(req.session));
+});
 
-app.get("api/getCallFriendPrompt", (req, res) => {
+app.get("/api/getCallFriendPrompt", (req, res) => {
     //TODO
-})
+});
+
+app.post("/api/sendScore", (req, res) =>{
+    req.session.score = req.body.score;
+    updateLeaderboard(req.session.username, req.session.score);
+    console.log(`${req.session.username}: ${req.session.score}`);
+    res.json({});
+});
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
+
+function getNextQuestion(session){
+    const randomIdx = Math.floor(Math.random()*session.currentQuestionsSet.length)
+    const nextQuestion = session.currentQuestionsSet[randomIdx];
+    session.currentQuestionsSet.splice(randomIdx, 1);
+    return nextQuestion;
+}
+
+function updateLeaderboard(name, score){
+    if(name in leaderboard && leaderboard[name]>=score)
+        return;
+    if(!(name in leaderboard))
+        leaderboard[name] = {name: name, score: score};
+    else
+        leaderboard[name].score = score;
+    fs.writeFile(leaderboardPath, JSON.stringify(leaderboard), (err) => {
+        if (err) return console.log(err);
+        console.log(JSON.stringify(leaderboard));
+        console.log('writing to ' + leaderboardPath);
+    });
+}
+
+function initializeNewGame(req){
+    req.session.username = req.body.user;
+    req.session.score = 0;
+    req.session.currentQuestionsSet = questionsData['questions'];
+    req.session.currentQuestion = getNextQuestion(req.session);
+}
+

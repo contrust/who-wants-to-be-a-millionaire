@@ -22,7 +22,7 @@ document.addEventListener('click', event => {
     if(["A", "B", "C", "D"].includes(event.target.id))
         checkAnswer(event.target.id);
 })
-GetNextQuestion();
+getNextQuestion();
 
 
 function checkAnswer(letter){
@@ -36,20 +36,20 @@ function checkAnswer(letter){
     highlightAnswers(rightAnswerButton, chosenAnswerButton);
     setTimeout(() => {
         if(isCorrect){
-            GetNextQuestion();
+            getNextQuestion();
             score = score + 10 + timeLeft;
             scoreText.innerText = score;
             resetTimer();
             answerChosen = false;
         }
         else {
-            return window.location.assign('end.html');
+            endGame();
         }
     }, totalHighlightTime);
 
 }
 
-function GetNextQuestion(){
+function getNextQuestion(){
     fetch("/api/getNextQuestion").then((res) => {
             return res.json();
         }
@@ -91,4 +91,18 @@ function resetTimer(){
     timeLeft = timeForAnswer;
     timer.innerText = timeLeft
     timerId = setInterval(countdown, 1000);
+}
+
+function endGame(){
+    {
+        console.log(JSON.stringify({"score": score}));
+        fetch('/api/sendScore', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"score": score})
+        }).then(() => window.location.replace("http://localhost:3000/gameOver"));
+    }
 }

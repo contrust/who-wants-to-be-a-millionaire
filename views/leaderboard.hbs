@@ -1,2 +1,7 @@
-<div id="GameOver">Game over</div>
-<div id="score">Score: {{score}}</div>
+<ul class="leaderboard">
+    {{#each items}}
+        <li>
+            <p class="leaderboard_line">{{name}} {{score}}</p>
+        </li>
+    {{/each}}
+</ul>
