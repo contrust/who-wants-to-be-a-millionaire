@@ -16,6 +16,7 @@ let questionsData = require(questionsFilePath);
 let leaderboard = require(leaderboardPath);
 let friendCallTemplates = fs.readFileSync(friendCallTemplatesPath, "utf-8").split(/\r?\n/);
 let crutchDictionary = {"A": 0, "B": 1, "C": 2, "D": 3};
+let levelsPrices = [50, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 500000, 1000000];
 
 
 const app = express();
@@ -112,6 +113,7 @@ function getNextQuestion(req) {
     const nextQuestion = req.session.currentQuestionsSet[nextQuestionIndex];
     req.session.currentQuestionsSet.splice(nextQuestionIndex, 1);
     req.session.currentQuestion = nextQuestion;
+    req.session.currentLevel++;
     return nextQuestion;
 }
 
@@ -129,6 +131,7 @@ function updateLeaderboard(name, score) {
 function refreshGameState(req) {
     req.session.username = req.body.user;
     req.session.score = 0;
+    req.session.currentLevel = 0;
     req.session.currentQuestionsSet = questionsData['questions'];
     req.session.currentQuestion = getNextQuestion(req);
 }
