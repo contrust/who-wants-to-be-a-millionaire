@@ -15,7 +15,7 @@ let score = 0;
 
 
 document.addEventListener('click', event => {
-    if(event.target.id.includes("answer"))
+    if(["Aanswer", "Banswer", "Canswer", "Danswer"].includes(event.target.id))
         checkAnswer(event.target.id[0]);
 })
 GetNextQuestion();
