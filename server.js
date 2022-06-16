@@ -92,7 +92,6 @@ app.get("/api/getFriendCallAnswer", (req, res) => {
         return;
     }
     let template = friendCallTemplates[getRandomNonNegativeInteger(friendCallTemplates.length)];
-    console.log(friendCallTemplates.length, getRandomNonNegativeInteger(friendCallTemplates.length), friendCallTemplates, template);
     let answer = getFriendCallAnswer(req.session.currentQuestion);
     let friendCallAnswer = getFormattedFriendCallAnswer(template, answer);
     req.session.friendCallAnswer = friendCallAnswer;
@@ -111,7 +110,6 @@ app.listen(port, () => console.log(`App listening on port ${port}`));
 function getNextQuestion(req) {
     const nextQuestionIndex = getRandomNonNegativeInteger(req.session.currentQuestionsSet.length);
     const nextQuestion = req.session.currentQuestionsSet[nextQuestionIndex];
-    console.log(nextQuestion);
     req.session.currentQuestionsSet.splice(nextQuestionIndex, 1);
     req.session.currentQuestion = nextQuestion;
     return nextQuestion;
@@ -148,7 +146,6 @@ function getFriendCallAnswer(questionData) {
     else {
         let answers = [...questionData["choices"]];
         answers.splice(crutchDictionary[questionData["answer"]], 1);
-        console.log(answers);
         return answers[getRandomNonNegativeInteger(answers.length)];
     }
 }
