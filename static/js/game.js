@@ -19,49 +19,49 @@ let answerChosen = false;
 let score = 0;
 
 
-document.addEventListener('click', event => {
-    if (["A", "B", "C", "D"].includes(event.target.id))
-        checkAnswer(event.target.id);
-    else if (event.target.id === 'friend-call') {
-        window.location.replace("http://localhost:3000/api/getFriendCallAnswer");
-    }
-});
-getNextQuestion();
-
-
 function checkAnswer(letter) {
     if (answerChosen) return;
     clearTimeout(timerId);
     answerChosen = true;
     let chosenAnswerButton = document.getElementById(`${letter}`);
     let rightAnswerButton = document.getElementById(`${rightAnswer}`);
-    let isCorrect = chosenAnswerButton.id === rightAnswerButton.id;
     highlightAnswers(rightAnswerButton, chosenAnswerButton);
     setTimeout(() => {
-        if (isCorrect) {
-            getNextQuestion();
-            score = score + 10 + timeLeft;
-            scoreText.innerText = score;
+        if (chosenAnswerButton.id === rightAnswerButton.id) {
+            updateCurrentQuestion();
+            updateCurrentScore();
             resetTimer();
             answerChosen = false;
-        } else {
-            endGame();
-        }
+        } else endGame();
     }, totalHighlightTime);
 
 }
 
-function getNextQuestion() {
-    fetch("/api/getNextQuestion").then((res) => {
-            return res.json();
-        }
-    ).then((questionData) => {
-        questionText.innerText = questionData['question'];
-        answerAText.innerText = questionData['choices'][0];
-        answerBText.innerText = questionData['choices'][1];
-        answerCText.innerText = questionData['choices'][2];
-        answerDText.innerText = questionData['choices'][3];
-        rightAnswer = questionData['answer'];
+function updateCurrentQuestion() {
+    fetch("/api/getNextQuestion").then(res => res.json())
+        .then((questionData) => {
+            if (questionData === null) endGame();
+            else {
+                updateQuestionElementsData(questionData);
+                rightAnswer = questionData['answer'];
+            }
+        });
+}
+
+function updateQuestionElementsData(questionData){
+    questionText.innerText = questionData['question'];
+    answerAText.innerText = questionData['choices'][0];
+    answerBText.innerText = questionData['choices'][1];
+    answerCText.innerText = questionData['choices'][2];
+    answerDText.innerText = questionData['choices'][3];
+}
+
+function updateCurrentScore(){
+    fetch("/api/getCurrentScore").then((res) => {
+        return res.json();
+    }).then((currentScoreData) => {
+        score = currentScoreData['currentScore'];
+        scoreText.innerText = score;
     });
 }
 
@@ -80,11 +80,10 @@ function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
         setTimeout(() => {
-            return window.location.assign("end.html");
+            return window.location.assign("/score");
         }, 1000);
     } else {
         timer.innerText = `${--timeLeft}`;
-
     }
 }
 
@@ -95,15 +94,14 @@ function resetTimer() {
 }
 
 function endGame() {
-    {
-        console.log(JSON.stringify({"score": score}));
-        fetch('/api/sendScore', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"score": score})
-        }).then(() => window.location.replace("http://localhost:3000/gameOver"));
-    }
+    fetch('/api/endGame', { method: 'POST' })
+        .then(() => window.location.assign("/score"));
 }
+
+document.addEventListener('click', event => {
+    if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(event.target.id);
+    else if (event.target.id === 'friend-call')
+        window.location.assign("/api/getFriendCallAnswer");
+});
+
+updateCurrentQuestion();
