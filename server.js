@@ -123,7 +123,7 @@ app.post("/api/endGame", (req, res) => {
     res.json({});
 });
 
-app.listen(port, () => console.log(`App listening on port ${port}`));
+app.listen(process.env.PORT || port, () => console.log(`App listening on port ${port}`));
 
 function updateLeaderboard(name, score) {
     if (name in leaderboard) {
