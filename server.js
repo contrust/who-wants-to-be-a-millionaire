@@ -144,7 +144,7 @@ function refreshGameState(req) {
     req.session.isVictory = false;
     req.session.currentLevel = 0;
     req.session.milestoneLevel = req.body.milestoneLevel;
-    req.session.currentQuestionsSet = questionsData['questions'];
+    req.session.currentQuestionsSet = questionsData;
     req.session.currentQuestion = null;
 }
 
@@ -154,11 +154,22 @@ function updateCurrentQuestion(req) {
     if (req.session.currentLevel > 15 || req.session.currentQuestionsSet.length === 0) {
         endGame(req);
     } else {
-        const nextQuestionIndex = getRandomNonNegativeInteger(req.session.currentQuestionsSet.length);
-        const nextQuestion = req.session.currentQuestionsSet[nextQuestionIndex];
-        req.session.currentQuestionsSet.splice(nextQuestionIndex, 1);
-        req.session.currentQuestion = nextQuestion;
+        if(req.session.currentLevel<=3)
+            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["EasyQuestions"]);
+        else if(req.session.currentLevel<=8)
+            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["MediumQuestions"]);
+        else if(req.session.currentLevel<=12)
+            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["HardQuestions"]);
+        else
+            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["VeryHardQuestions"]);
     }
+}
+
+function getQuestionFromSet(set){
+    const nextQuestionIndex = getRandomNonNegativeInteger(set.length);
+    const nextQuestion = set[nextQuestionIndex];
+    set.splice(nextQuestionIndex, 1);
+    return nextQuestion;
 }
 
 function endGame(req) {
