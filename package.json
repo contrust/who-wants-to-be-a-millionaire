@@ -20,7 +20,7 @@
     "prettier": "^2.2.0"
   },
   "scripts": {
-    "start": "better-npm-run start"
+    "start": "node server.js"
   },
   "betterScripts": {
     "start": {
