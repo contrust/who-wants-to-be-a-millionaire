@@ -1,0 +1,10 @@
+<div id="message">
+    {{#if isVictory}}
+        Поздравляем, {{username}}, ты ответил на все вопросы, ты такой cool!!!
+    {{else}}
+        В этот раз, {{username}}, у тебя не получилось ответить на все вопросы.
+    {{/if}}
+</div>
+<div id="score">Счёт: {{score}}</div>
+<button onclick="location.href = '/leaderboard'">Перейти к таблице лидеров</button>
+<button onclick="location.href = '/start'">Перейти в стартовое меню</button>
