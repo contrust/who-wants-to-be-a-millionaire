@@ -73,7 +73,7 @@ app.get("/score", (req, res) => {
         score: req.session.score,
         isVictory: req.session.isVictory
     })
-})
+});
 
 
 app.get("/leaderboard",
@@ -85,7 +85,14 @@ app.get("/leaderboard",
                 .sort((a, b) => b.score - a.score)
                 .slice(0, leaderboardSize),
         });
-    });
+});
+
+app.get("/guide", (req, res) => {
+    res.render("guide", {
+        layout: "default",
+        title: "Guide",
+    })
+});
 
 
 app.get("/api/getNextQuestion", (req, res) => {
