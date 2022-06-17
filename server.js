@@ -1,13 +1,11 @@
 const express = require("express");
 const hbs = require("express-handlebars");
-const path = require("path");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const questionsFilePath = './static/questions/questions.json';
 const leaderboardPath = './static/leaderboard/leaderboard.json';
 const friendCallTemplatesPath = "./static/templates/friendCallTemplates.txt";
-const rootDir = process.cwd();
 const leaderboardSize = 10;
 const port = 3000;
 const friendCallRightAnswerProbability = 0.5;
@@ -27,8 +25,8 @@ app.engine(
     hbs({
         extname: "hbs",
         defaultView: "default",
-        layoutsDir: path.join(rootDir, "views/layouts/"),
-        partialsDir: path.join(rootDir, "views/partials/"),
+        layoutsDir: "views/layouts",
+        partialsDir: "views/partials",
     })
 );
 
