@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const questionsFilePath = './static/questions/questions.json';
 const leaderboardPath = './static/leaderboard/leaderboard.json';
-const friendCallTemplatesPath = "./static/templates/callToFriendTemplates.txt";
+const friendCallTemplatesPath = "./static/templates/friendCallTemplates.txt";
 const rootDir = process.cwd();
 const leaderboardSize = 10;
 const port = 3000;
@@ -16,7 +16,7 @@ let questionsData = require(questionsFilePath);
 let leaderboard = require(leaderboardPath);
 let friendCallTemplates = fs.readFileSync(friendCallTemplatesPath, "utf-8").split(/\r?\n/);
 let crutchDictionary = {"A": 0, "B": 1, "C": 2, "D": 3};
-let levelsPrices = [50, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 500000, 1000000];
+let levelsPrices = [0, 50, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 500000, 1000000];
 
 
 const app = express();
@@ -65,26 +65,40 @@ app.get("/game", (req, res) => {
     });
 });
 
-app.get("/gameOver", (req, res) => {
-    res.render("gameOver", {
+app.get("/score", (req, res) => {
+    res.render("score", {
         layout: "default",
-        title: "Game Over",
+        title: "Score",
+        username: req.session.username,
         score: req.session.score,
+        isVictory: req.session.isVictory
     })
 })
 
 
-app.get("/leaderboard", (req, res) => {
+app.get("/leaderboard",
+    (req, res) => {
     res.render("leaderboard", {
         layout: "default",
-        title: "leaderboard",
-        items: Object.values(leaderboard).sort((a, b) => b.score - a.score).slice(0, leaderboardSize),
+        title: "Leaderboard",
+        items: Object.values(leaderboard)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, leaderboardSize),
     });
 });
 
 
 app.get("/api/getNextQuestion", (req, res) => {
-    res.json(getNextQuestion(req));
+    if (req.session.isGameOver) {
+        res.json({});
+        return;
+    }
+    updateCurrentQuestion(req);
+    res.json(req.session.currentQuestion);
+});
+
+app.get("/api/getCurrentScore", (req, res) => {
+    res.json({"currentScore": req.session.score});
 });
 
 app.get("/api/getFriendCallAnswer", (req, res) => {
@@ -99,28 +113,18 @@ app.get("/api/getFriendCallAnswer", (req, res) => {
     res.json({"friendCallAnswer": friendCallAnswer});
 });
 
-app.post("/api/sendScore", (req, res) => {
-    req.session.score = req.body.score;
-    updateLeaderboard(req.session.username, req.session.score);
-    console.log(`${req.session.username}: ${req.session.score}`);
+app.post("/api/endGame", (req, res) => {
+    endGame(req);
     res.json({});
 });
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
 
-function getNextQuestion(req) {
-    const nextQuestionIndex = getRandomNonNegativeInteger(req.session.currentQuestionsSet.length);
-    const nextQuestion = req.session.currentQuestionsSet[nextQuestionIndex];
-    req.session.currentQuestionsSet.splice(nextQuestionIndex, 1);
-    req.session.currentQuestion = nextQuestion;
-    req.session.currentLevel++;
-    return nextQuestion;
-}
-
 function updateLeaderboard(name, score) {
-    if (name in leaderboard && leaderboard[name] >= score) return;
-    if (!(name in leaderboard)) leaderboard[name] = {name: name, score: score};
-    else leaderboard[name].score = score;
+    if (name in leaderboard){
+        if (leaderboard[name] >= score) return;
+        leaderboard[name].score = score;
+    } else leaderboard[name] = {name: name, score: score};
     fs.writeFile(leaderboardPath, JSON.stringify(leaderboard), (err) => {
         if (err) return console.log(err);
         console.log(JSON.stringify(leaderboard));
@@ -131,9 +135,37 @@ function updateLeaderboard(name, score) {
 function refreshGameState(req) {
     req.session.username = req.body.user;
     req.session.score = 0;
+    req.session.isGameOver = false;
+    req.session.isVictory = false;
     req.session.currentLevel = 0;
+    req.session.milestoneLevel = req.body.milestoneLevel;
     req.session.currentQuestionsSet = questionsData['questions'];
-    req.session.currentQuestion = getNextQuestion(req);
+    req.session.currentQuestion = null;
+}
+
+function updateCurrentQuestion(req) {
+    req.session.currentLevel++;
+    req.session.score = levelsPrices[req.session.currentLevel - 1];
+    if (req.session.currentLevel > 15 || req.session.currentQuestionsSet.length === 0){
+        endGame(req);
+    } else {
+        const nextQuestionIndex = getRandomNonNegativeInteger(req.session.currentQuestionsSet.length);
+        const nextQuestion = req.session.currentQuestionsSet[nextQuestionIndex];
+        req.session.currentQuestionsSet.splice(nextQuestionIndex, 1);
+        req.session.currentQuestion = nextQuestion;
+    }
+}
+
+function endGame(req){
+    if (req.session.isGameOver) return;
+    req.session.isGameOver = true;
+    req.session.currentQuestion = null;
+    if (req.session.milestoneLevel < req.session.currentLevel){
+        if (req.session.currentLevel > 15) req.session.isVictory = true;
+        else req.session.score = levelsPrices[Math.min(req.session.milestoneLevel, 15)];
+        updateLeaderboard(req.session.username, req.session.score);
+    } else req.session.score = 0;
+    console.log(`${req.session.username}: ${req.session.score}`);
 }
 
 function getRandomNonNegativeInteger(maxInteger) {
