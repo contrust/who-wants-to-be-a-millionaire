@@ -127,7 +127,7 @@ app.listen(process.env.PORT || port, () => console.log(`App listening on port ${
 
 function updateLeaderboard(name, score) {
     if (name in leaderboard) {
-        if (leaderboard[name] >= score) return;
+        if (leaderboard[name][score] >= score) return;
         leaderboard[name].score = score;
     } else leaderboard[name] = {name: name, score: score};
     fs.writeFile(leaderboardPath, JSON.stringify(leaderboard), (err) => {
