@@ -48,7 +48,7 @@ function updateCurrentQuestion() {
         });
 }
 
-function updateQuestionElementsData(questionData){
+function updateQuestionElementsData(questionData) {
     questionText.innerText = questionData['question'];
     answerAText.innerText = questionData['choices'][0];
     answerBText.innerText = questionData['choices'][1];
@@ -56,7 +56,7 @@ function updateQuestionElementsData(questionData){
     answerDText.innerText = questionData['choices'][3];
 }
 
-function updateCurrentScore(){
+function updateCurrentScore() {
     fetch("/api/getCurrentScore").then((res) => {
         return res.json();
     }).then((currentScoreData) => {
@@ -94,7 +94,7 @@ function resetTimer() {
 }
 
 function endGame() {
-    fetch('/api/endGame', { method: 'POST' })
+    fetch('/api/endGame', {method: 'POST'})
         .then(() => window.location.assign("/score"));
 }
 

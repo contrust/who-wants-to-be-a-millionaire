@@ -78,14 +78,14 @@ app.get("/score", (req, res) => {
 
 app.get("/leaderboard",
     (req, res) => {
-    res.render("leaderboard", {
-        layout: "default",
-        title: "Leaderboard",
-        items: Object.values(leaderboard)
-            .sort((a, b) => b.score - a.score)
-            .slice(0, leaderboardSize),
+        res.render("leaderboard", {
+            layout: "default",
+            title: "Leaderboard",
+            items: Object.values(leaderboard)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, leaderboardSize),
+        });
     });
-});
 
 
 app.get("/api/getNextQuestion", (req, res) => {
@@ -121,7 +121,7 @@ app.post("/api/endGame", (req, res) => {
 app.listen(port, () => console.log(`App listening on port ${port}`));
 
 function updateLeaderboard(name, score) {
-    if (name in leaderboard){
+    if (name in leaderboard) {
         if (leaderboard[name] >= score) return;
         leaderboard[name].score = score;
     } else leaderboard[name] = {name: name, score: score};
@@ -146,7 +146,7 @@ function refreshGameState(req) {
 function updateCurrentQuestion(req) {
     req.session.currentLevel++;
     req.session.score = levelsPrices[req.session.currentLevel - 1];
-    if (req.session.currentLevel > 15 || req.session.currentQuestionsSet.length === 0){
+    if (req.session.currentLevel > 15 || req.session.currentQuestionsSet.length === 0) {
         endGame(req);
     } else {
         const nextQuestionIndex = getRandomNonNegativeInteger(req.session.currentQuestionsSet.length);
@@ -156,11 +156,11 @@ function updateCurrentQuestion(req) {
     }
 }
 
-function endGame(req){
+function endGame(req) {
     if (req.session.isGameOver) return;
     req.session.isGameOver = true;
     req.session.currentQuestion = null;
-    if (req.session.milestoneLevel < req.session.currentLevel){
+    if (req.session.milestoneLevel < req.session.currentLevel) {
         if (req.session.currentLevel > 15) req.session.isVictory = true;
         else req.session.score = levelsPrices[Math.min(req.session.milestoneLevel, 15)];
         updateLeaderboard(req.session.username, req.session.score);
