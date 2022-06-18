@@ -7,6 +7,62 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+body{
+    margin: 0;
+}
+
+button{
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+    color: white;
+    font-size: 200%;
+}
+
+
+table, th, td {
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+}
+
+table{
+    background-color: #050553;
+}
+
+
+td, th{
+    color: white;
+}
+
+.text{
+    font-size: 200%;
+    color: white;
+}
+
+.title{
+    color: white;
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+    font-size: 250%;
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.label{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 #question{
@@ -50,14 +106,6 @@
     background-color: white;
 }
 
-body{
-    margin: 0;
-}
-
-#startGame{
-    height: 150px;
-    width: 350px;
-}
 
 #AButton, #BButton, #CButton, #DButton{
     background: transparent;
@@ -113,3 +161,42 @@ body{
     bottom: 5%;
     right: 15%;
 }
+
+
+#LBname{
+    width: 40vw;
+    max-width: 800px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+#LBscore{
+    width: 20vw;
+    max-width: 400px;
+}
+
+#nameColumn{
+    text-align: left;
+    padding-left: 10px;
+}
+
+#scoreColumn{
+    text-align: center;
+}
+
+#leaderboardTitle{
+    max-width: 600px;
+    min-width: 200px;
+    width: 20vw;
+}
+
+#toStartButton{
+    width: 20vw;
+    max-width: 600px;
+    min-width: 200px;
+    min-height: 120px;
+    height: 5vw;
+}
+
+
+

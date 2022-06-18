@@ -1,8 +1,18 @@
-<ul class="leaderboard">
+<div>
+    <p class="title" id="leaderboardTitle">Таблица лидеров</p>
+</div>
+<table class="leaderboard">
+    <thead>
+        <tr>
+            <th class="text" id="LBname">Имя</th>
+            <th class="text" id="LBscore">Счет</th>
+        </tr>
+    </thead>
     {{#each items}}
-        <li>
-            <p class="leaderboard_line">{{name}} {{score}}</p>
-        </li>
+    <tr>
+        <td class="text" id="nameColumn">{{name}}</td>
+        <td class="text" id="scoreColumn">{{score}}</td>
+    </tr>
     {{/each}}
-</ul>
-<button onclick="location.href = '/start'">Перейти в стартовое меню</button>
+</table>
+<button id="toStartButton" onclick="location.href = '/start'">Перейти в стартовое меню</button>

@@ -78,7 +78,7 @@ app.get("/leaderboard",
     (req, res) => {
         res.render("leaderboard", {
             layout: "default",
-            title: "Leaderboard",
+            title: "Таблица лидеров",
             items: Object.values(leaderboard)
                 .sort((a, b) => b.score - a.score)
                 .slice(0, leaderboardSize),
