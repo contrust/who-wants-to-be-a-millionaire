@@ -7,8 +7,8 @@ const scoreText = document.getElementById('score');
 const timer = document.getElementById('timer');
 const friendCall = document.getElementById('friend-call');
 const timeForAnswer = 30;
-const totalHighlightTime = 500;
-const orangeHighlightTime = 300;
+const totalHighlightTime = 5000;
+const orangeHighlightTime = 3000;
 const greenHighlightTime = totalHighlightTime - orangeHighlightTime;
 
 let rightAnswer = undefined;
@@ -88,7 +88,7 @@ function countdown() {
             return window.location.assign("/score");
         }, 1000);
     } else {
-        timer.innerText = `${timeLeft}`;
+        timer.innerText = `${--timeLeft}`;
     }
 }
 
