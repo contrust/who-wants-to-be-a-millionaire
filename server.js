@@ -8,12 +8,12 @@ const leaderboardPath = './static/leaderboard/leaderboard.json';
 const friendCallTemplatesPath = "./static/templates/friendCallTemplates.txt";
 const leaderboardSize = 10;
 const port = 3000;
+const maxUsernameLength = 28;
 const friendCallRightAnswerProbability = 0.5;
 
-let questionsData = require(questionsFilePath);
+let questions = require(questionsFilePath)["questions"];
 let leaderboard = require(leaderboardPath);
 let friendCallTemplates = fs.readFileSync(friendCallTemplatesPath, "utf-8").split(/\r?\n/);
-let crutchDictionary = {"A": 0, "B": 1, "C": 2, "D": 3};
 let levelsPrices = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000];
 
 
@@ -29,15 +29,15 @@ app.engine("hbs",
     })
 );
 
-
 app.use('/static', express.static('static'));
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: "asdfunmmc",
+    secret: "7&NT0c#_myc9!!p[==_",
 }));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use('/favicon.ico', express.static('static/images/favicon.ico'));
 
 app.get("/", (_, res) => {
     res.redirect('/start');
@@ -52,15 +52,20 @@ app.get("/start", (req, res) => {
 });
 
 app.post("/start", (req, res) => {
-    req.session.username = req.body.user;
-    req.session.milestoneLevel = req.body.milestoneLevel;
-    res.redirect("/game");
+    if (isStartUserParametersValid(req)){
+        req.session.username = req.body.username;
+        req.session.milestoneLevel = +req.body.milestoneLevel;
+        res.redirect("/game");
+    } else {
+        res.redirect("/start");
+    }
 });
 
 app.get("/game", (req, res) => {
-    if (req.session.username === undefined || req.session.currentLevel > 0)
+    if (req.session.username === undefined || req.session.currentQuestion !== null)
         res.redirect('/start');
     else {
+        updateCurrentQuestion(req);
         res.render("game", {
             layout: "default",
             title: "Game",
@@ -97,30 +102,29 @@ app.get("/guide", (req, res) => {
     })
 });
 
+app.post("/api/answerCurrentQuestion", (req, res) => {
+    let success = answerCurrentQuestion(req);
+    if (success) updateCurrentLevel(req);
+    res.json({"success": success});
+});
 
-app.get("/api/getNextQuestion", (req, res) => {
-    if (req.session.isGameOver) {
-        res.json({});
-        return;
-    }
-    updateCurrentQuestion(req);
+
+app.get("/api/getCurrentQuestion", (req, res) => {
     res.json(req.session.currentQuestion);
 });
 
 app.get("/api/getCurrentScore", (req, res) => {
-    console.log(req.session.score)
     res.json({"currentScore": req.session.score});
 });
 
 app.get("/api/getFriendCallAnswer", (req, res) => {
-    if (req.session.friendCallAnswer) {
-        res.json();
-        return;
+    let friendCallAnswer = null;
+    if (!req.session.isFriendCallUsed) {
+        let template = friendCallTemplates[getRandomNonNegativeInteger(friendCallTemplates.length)];
+        let answer = getFriendCallAnswer(req.session.currentQuestion);
+        friendCallAnswer = getFormattedFriendCallAnswer(template, answer);
+        req.session.isFriendCallUsed = true;
     }
-    let template = friendCallTemplates[getRandomNonNegativeInteger(friendCallTemplates.length)];
-    let answer = getFriendCallAnswer(req.session.currentQuestion);
-    let friendCallAnswer = getFormattedFriendCallAnswer(template, answer);
-    req.session.friendCallAnswer = friendCallAnswer;
     res.json({"friendCallAnswer": friendCallAnswer});
 });
 
@@ -130,6 +134,14 @@ app.post("/api/endGame", (req, res) => {
 });
 
 app.listen(process.env.PORT || port, () => console.log(`App listening on port ${port}`));
+
+function isStartUserParametersValid(req){
+    return (typeof req.body.username === "string") &&
+        req.body.username.length <= maxUsernameLength &&
+        !isNaN(+req.body.milestoneLevel) &&
+        req.body.milestoneLevel >= 1 &&
+        req.body.milestoneLevel <= 14;
+}
 
 function updateLeaderboard(name, score) {
     if (name in leaderboard) {
@@ -147,33 +159,46 @@ function refreshGameState(req) {
     req.session.score = 0;
     req.session.isGameOver = false;
     req.session.isVictory = false;
-    req.session.currentLevel = 0;
-    req.session.currentQuestionsSet = questionsData;
+    req.session.isFriendCallUsed = false;
+    req.session.isFiftyFiftyUsed = false;
+    req.session.currentLevel = 1;
+    req.session.currentQuestionsSet = null;
     req.session.currentQuestion = null;
+    req.session.isQuestionAnswered = false;
+}
+
+function answerCurrentQuestion(req){
+    let success = false;
+    if (!req.session.isQuestionAnswered && !req.session.isGameOver){
+        success = req.session.currentQuestion["answerIndex"] === req.body["answerIndex"];
+        req.session.isQuestionAnswered = true;
+    }
+    return success;
 }
 
 function updateCurrentQuestion(req) {
-    req.session.currentLevel++;
-    req.session.score = levelsPrices[req.session.currentLevel - 1];
-    if (req.session.currentLevel > 15 || req.session.currentQuestionsSet.length === 0) {
+    if (req.session.currentLevel > 15 ||
+        req.session.currentQuestionsSet !== null &&
+        req.session.currentQuestionsSet.length === 0) {
         endGame(req);
     } else {
-        if (req.session.currentLevel <= 3)
-            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["EasyQuestions"]);
-        else if (req.session.currentLevel <= 8)
-            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["MediumQuestions"]);
-        else if (req.session.currentLevel <= 12)
-            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["HardQuestions"]);
-        else
-            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["VeryHardQuestions"]);
+        updateCurrentQuestionSet(req);
+        req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet);
+        req.session.isQuestionAnswered = false;
     }
 }
 
-function popRandomArrayElement(array) {
-    const randomIndex = getRandomNonNegativeInteger(array.length);
-    const randomElement = array[randomIndex];
-    array.splice(randomIndex, 1);
-    return randomElement;
+function updateCurrentLevel(req){
+    req.session.currentLevel++;
+    req.session.score = levelsPrices[req.session.currentLevel - 1];
+    updateCurrentQuestion(req);
+}
+
+function updateCurrentQuestionSet(req){
+    if (req.session.currentLevel === 1) req.session.currentQuestionsSet = [...questions["easy"]];
+    else if (req.session.currentLevel === 5) req.session.currentQuestionsSet = [...questions["normal"]];
+    else if (req.session.currentLevel === 9) req.session.currentQuestionsSet = [...questions["hard"]];
+    else if (req.session.currentLevel === 13) req.session.currentQuestionsSet = [...questions["expert"]];
 }
 
 function endGame(req) {
@@ -181,7 +206,7 @@ function endGame(req) {
     req.session.isGameOver = true;
     req.session.currentQuestion = null;
     if (req.session.milestoneLevel < req.session.currentLevel) {
-        if (req.session.currentLevel > 15) req.session.isVictory = true;
+        if (req.session.currentLevel >= 15) req.session.isVictory = true;
         else req.session.score = levelsPrices[Math.min(req.session.milestoneLevel, 15)];
         updateLeaderboard(req.session.username, req.session.score);
     } else req.session.score = 0;
@@ -196,12 +221,19 @@ function getFormattedFriendCallAnswer(template, answer) {
     return template.replace("*", answer);
 }
 
+function popRandomArrayElement(array) {
+    const randomIndex = getRandomNonNegativeInteger(array.length);
+    const randomElement = array[randomIndex];
+    array.splice(randomIndex, 1);
+    return randomElement;
+}
+
 function getFriendCallAnswer(questionData) {
-    if (Math.random() < friendCallRightAnswerProbability) return questionData["answer"];
+    if (Math.random() < friendCallRightAnswerProbability) return questionData["answerIndex"];
     else {
         let answers = [...questionData["choices"]];
-        answers.splice(crutchDictionary[questionData["answer"]], 1);
-        return answers[getRandomNonNegativeInteger(answers.length)];
+        answers.splice(questionData["answerIndex"], 1);
+        return popRandomArrayElement(answers);
     }
 }
 
