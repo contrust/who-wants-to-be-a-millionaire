@@ -158,21 +158,21 @@ function updateCurrentQuestion(req) {
         endGame(req);
     } else {
         if (req.session.currentLevel <= 3)
-            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["EasyQuestions"]);
+            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["EasyQuestions"]);
         else if (req.session.currentLevel <= 8)
-            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["MediumQuestions"]);
+            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["MediumQuestions"]);
         else if (req.session.currentLevel <= 12)
-            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["HardQuestions"]);
+            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["HardQuestions"]);
         else
-            req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["VeryHardQuestions"]);
+            req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet["VeryHardQuestions"]);
     }
 }
 
-function getQuestionFromSet(set) {
-    const nextQuestionIndex = getRandomNonNegativeInteger(set.length);
-    const nextQuestion = set[nextQuestionIndex];
-    set.splice(nextQuestionIndex, 1);
-    return nextQuestion;
+function popRandomArrayElement(array) {
+    const randomIndex = getRandomNonNegativeInteger(array.length);
+    const randomElement = array[randomIndex];
+    array.splice(randomIndex, 1);
+    return randomElement;
 }
 
 function endGame(req) {
