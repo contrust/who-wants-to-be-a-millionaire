@@ -1,31 +1,59 @@
-<div id="timer"></div>
-<div id="hints">
-    <div id="fifty-fifty">50/50</div>
-    <div id="friend-call">Call friend</div>
+<div id="topHalf">
+    <div id="timer"></div>
+    <div id="hints">
+        <div class="hint" id="fifty-fifty">
+        </div>
+        <div class="hint" id="friend-call">
+        </div>
+    </div>
+    <ul id="steps" reversed>
+        <li class="text step" id="step15">15. 1 000 000</li>
+        <li class="text step" id="step14">14. 500 000</li>
+        <li class="text step" id="step13">13. 250 000</li>
+        <li class="text step" id="step12">12. 128 000</li>
+        <li class="text step" id="step11">11. 64 000</li>
+        <li class="text step" id="step10">10. 32 000</li>
+        <li class="text step" id="step9">9.&nbsp;&nbsp;16 000</li>
+        <li class="text step" id="step8">8.&nbsp;&nbsp;8 000</li>
+        <li class="text step" id="step7">7.&nbsp;&nbsp;4 000</li>
+        <li class="text step" id="step6">6.&nbsp;&nbsp;2 000</li>
+        <li class="text step" id="step5">5.&nbsp;&nbsp;1 000</li>
+        <li class="text step" id="step4">4.&nbsp;&nbsp;500</li>
+        <li class="text step" id="step3">3.&nbsp;&nbsp;300</li>
+        <li class="text step" id="step2">2.&nbsp;&nbsp;200</li>
+        <li class="text step" id="step1">1.&nbsp;&nbsp;100</li>
+    </ul>
 </div>
-<div class="scoreContainer">Score:
-    <div id="score">0</div>
+<div id="bottomHalf">
+    <div id="question">
+        <div id="questionTextDiv">
+            <p class="text" id="questionText"></p>
+        </div>
+        <div id="answers">
+            <div id="AButton" class='Answer'>
+                <p class="letter" id="letterA">A:</p>
+                <img class="answerImg" id="A" src="/static/images/black.png">
+                <p class="answerText" id="AanswerText"></p>
+            </div>
+            <div id="BButton" class='Answer'>
+                <p class="letter" id="letterB">B:</p>
+                <img class="answerImg" id="B" src="/static/images/black.png">
+                <p class="answerText" id="BanswerText"></p>
+            </div>
+            <div id="CButton" class='Answer'>
+                <p class="letter" id="letterC">C:</p>
+                <img class="answerImg" id="C" src="/static/images/black.png">
+                <p class="answerText" id="CanswerText"></p>
+            </div>
+            <div id="DButton" class='Answer'>
+                <p class="letter" id="letterD">D:</p>
+                <img class="answerImg" id="D" src="/static/images/black.png">
+                <p class="answerText" id="DanswerText"></p>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="question">
-    <p id="questionText"></p>
-</div>
-<div id="answers">
-    <button id="AButton" class='Answer' name="answer" value="A">
-        <img id="A" src="/static/images/black.png">
-        <p id="AanswerText"></p>
-    </button>
-    <button id="BButton" class='Answer' name="answer" value="B">
-        <img id="B" src="/static/images/black.png">
-        <p id="BanswerText"></p>
-    </button>
-    <button id="CButton" class='Answer' name="answer" src="/static/images/black.png" value="C">
-        <img id="C" src="/static/images/black.png">
-        <p id="CanswerText"></p>
-    </button>
-    <button id="DButton" class='Answer' name="answer" src="/static/images/black.png" value="D">
-        <img id="D" src="/static/images/black.png">
-        <p id="DanswerText"></p>
-    </button>
-</div>
+
+
 
 <script src="static/js/game.js"></script>

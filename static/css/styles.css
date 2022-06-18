@@ -1,6 +1,8 @@
 #main{
     position: absolute;
     background-image: url("../images/background.png");
+    background-repeat: no-repeat;
+    background-color: black;
     min-width: 100%;
     min-height: 100vh;
     background-position: center; text-align: center;
@@ -23,17 +25,34 @@ button{
     font-size: 200%;
 }
 
-
-table, th, td {
+.leaderboard th,.leaderboard td {
     border: 1px solid black;
     border-radius: 10px;
     border-top-color: cornflowerblue;
 }
 
+#steps{
+    font-size: 10px;
+    width: 500px;
+    height: 800px;
+    position: absolute;
+    left: 70%;
+    list-style: none;
+}
+
+.step{
+    text-align: left;
+    width: 150px;
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+    padding-left: 10px;
+}
+
 table{
     background-color: #050553;
 }
-
 
 td, th{
     color: white;
@@ -65,103 +84,143 @@ td, th{
     flex-direction: column;
 }
 
-#question{
-    position: absolute;
-    width: 70%;
-    height: 10%;
-    bottom: 250px;
-    align-items: center;
-    justify-content: center;
-    background-image: url("../images/quest.png");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-
-#questionText{
-    color: white;
-    align-items: center;
-    width: 60%;
-}
-
-#answers{
-    position: absolute;
-    width: 70%;
-    height: 20%;
-    bottom: 50px;
-    background-position: center; text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 #timer{
     background-color: white;
 }
 
-#score{
-    background-color: white;
-}
-
 #hints{
-    background-color: white;
+    display: flex;
+
 }
 
-
-#AButton, #BButton, #CButton, #DButton{
-    background: transparent;
-    border: none;
+.hint{
+    width: 100px;
+    height: 100px;
 }
 
-#A, #B, #C, #D{
-    position: absolute;
-    height: 30%;
-    width: 30%;
+#fifty-fifty{
+    background-image: url("../images/5050.png");
 }
-#AanswerText, #BanswerText, #CanswerText, #DanswerText{
-    position: absolute;
+
+#friend-call{
+    background-image: url("../images/call.png");
+}
+
+#topHalf, #bottomHalf{
+    width: 100%;
+    height: 50vh;
+}
+
+#topHalf{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    max-width: 1200px;
+    min-width: 1000px;
+    height: 400px;
+}
+
+#bottomHalf{
+    max-height: 500px;
+}
+
+#question{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+#questionTextDiv{
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    height: 20%;
+    min-height: 100px;
+    min-width: 900px;
+    max-width: 1600px;
+    max-height: 100px;
+    background-image: url("../images/quest.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    align-items: center;
+}
+
+#questionText{
+    margin: 0;
     color: white;
+    align-items: center;
+    width: 60%;
+    height: 60%;
+    font-size: 25px;
 }
 
-#AanswerText{
-    top: 5%;
-    left: 18%;
+#AButton{
+    top: 15%;
+    left: 5%;
 }
 
-#BanswerText{
-    top: 5%;
-    left: 58%;
+#BButton{
+    top: 15%;
+    right: 5%;
 }
 
-#CanswerText {
-    bottom: 5%;
-    left: 18%;
+#CButton{
+    bottom: 15%;
+    left: 5%;
 }
 
-#DanswerText{
-    bottom: 5%;
-    left: 58%;
+#DButton{
+    bottom: 15%;
+    right: 5%;
 }
 
-#A {
-    top: 5%;
-    left: 15%;
+#answers{
+    position: relative;
+    width: 60%;
+    height: 70%;
+    max-width: 1200px;
+    max-height: 250px;
+    min-height: 180px;
+    min-width: 800px;
+
 }
 
-#B {
-    top: 5%;
-    right: 15%;
+.answerText{
+    color: white;
+    position: absolute;
+    margin: 0;
+    top: 18%;
+    left: 30%;
+    font-size: 25px;
 }
 
-#C {
-    bottom: 5%;
-    left: 15%;
+#AanswerText, #BanswerText, #CanswerText, #DanswerText{
 }
 
-#D {
-    bottom: 5%;
-    right: 15%;
+.Answer{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    height: 25%;
+    width: 50%;
+    min-height: 60px;
+    min-width: 350px;
 }
 
+.answerImg{
+    width: 70%;
+    height: 100%;
+}
+
+.letter{
+    position: relative;
+    color: #f8db22;
+    font-size: 25px;
+    left: 10%;
+    top: -23%;
+}
 
 #LBname{
     width: 40vw;

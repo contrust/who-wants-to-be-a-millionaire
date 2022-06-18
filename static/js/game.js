@@ -7,8 +7,8 @@ const scoreText = document.getElementById('score');
 const timer = document.getElementById('timer');
 const friendCall = document.getElementById('friend-call');
 const timeForAnswer = 30;
-const totalHighlightTime = 5000;
-const orangeHighlightTime = 3000;
+const totalHighlightTime = 500;
+const orangeHighlightTime = 300;
 const greenHighlightTime = totalHighlightTime - orangeHighlightTime;
 
 let rightAnswer = undefined;
@@ -17,6 +17,7 @@ let timerId = setInterval(countdown, 1000);
 timer.innerText = `${timeForAnswer}`;
 let answerChosen = false;
 let score = 0;
+let questionNumber = 0;
 
 
 function checkAnswer(letter) {
@@ -42,6 +43,10 @@ function updateCurrentQuestion() {
         .then((questionData) => {
             if (questionData === null) endGame();
             else {
+                questionNumber++;
+                document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold"
+                if(questionNumber>1)
+                    document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "#050553"
                 updateQuestionElementsData(questionData);
                 rightAnswer = questionData['answer'];
             }
@@ -83,7 +88,7 @@ function countdown() {
             return window.location.assign("/score");
         }, 1000);
     } else {
-        timer.innerText = `${--timeLeft}`;
+        timer.innerText = `${timeLeft}`;
     }
 }
 

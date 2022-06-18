@@ -14,7 +14,7 @@ let questionsData = require(questionsFilePath);
 let leaderboard = require(leaderboardPath);
 let friendCallTemplates = fs.readFileSync(friendCallTemplatesPath, "utf-8").split(/\r?\n/);
 let crutchDictionary = {"A": 0, "B": 1, "C": 2, "D": 3};
-let levelsPrices = [0, 50, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 500000, 1000000];
+let levelsPrices = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000];
 
 
 const app = express();
@@ -109,6 +109,7 @@ app.get("/api/getNextQuestion", (req, res) => {
 });
 
 app.get("/api/getCurrentScore", (req, res) => {
+    console.log(req.session.score)
     res.json({"currentScore": req.session.score});
 });
 

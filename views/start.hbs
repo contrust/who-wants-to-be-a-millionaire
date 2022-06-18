@@ -1,10 +1,12 @@
 <form class="form" method="post">
-    <label class="label" for="user">
-        <p class="title">Введите ваше имя:</p>
+    <label class="title" for="user">Введите ваше имя:
         <input id="user" name="user" type="text" value="User" required>
-        <p class="title">Введите номер вопроса с несгораемой суммой:</p>
+    </label>
+    <label class="title">Введите номер вопроса с несгораемой суммой:
         <input id="milestoneLevel" name="milestoneLevel" type="number" value="1" required min="1" max="14">
     </label>
+
+
     <button class="action" type="submit" id="startGame">Начать игру</button>
 </form>
 <button onclick="location.href = '/leaderboard'">Перейти к таблице лидеров</button>
