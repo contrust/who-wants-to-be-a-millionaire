@@ -52,15 +52,21 @@ app.get("/start", (_, res) => {
 });
 
 app.post("/start", (req, res) => {
-    refreshGameState(req);
+    req.session.username = req.body.user;
     res.redirect("/game");
 });
 
 app.get("/game", (req, res) => {
-    res.render("game", {
-        layout: "default",
-        title: "Game",
-    });
+    if(typeof req.session.username == "undefined"){
+        res.redirect('/start');
+    }
+    else{
+        refreshGameState(req);
+        res.render("game", {
+            layout: "default",
+            title: "Game",
+        });
+    }
 });
 
 app.get("/score", (req, res) => {
@@ -138,7 +144,6 @@ function updateLeaderboard(name, score) {
 }
 
 function refreshGameState(req) {
-    req.session.username = req.body.user;
     req.session.score = 0;
     req.session.isGameOver = false;
     req.session.isVictory = false;
