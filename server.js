@@ -20,8 +20,7 @@ let levelsPrices = [0, 50, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32
 const app = express();
 
 app.set("view engine", "hbs");
-app.engine(
-    "hbs",
+app.engine("hbs",
     hbs({
         extname: "hbs",
         defaultView: "default",
@@ -44,7 +43,8 @@ app.get("/", (_, res) => {
     res.redirect('/start');
 });
 
-app.get("/start", (_, res) => {
+app.get("/start", (req, res) => {
+    refreshGameState(req);
     res.render("start", {
         layout: "default",
         title: "Start"
@@ -54,7 +54,6 @@ app.get("/start", (_, res) => {
 app.post("/start", (req, res) => {
     req.session.username = req.body.user;
     req.session.milestoneLevel = req.body.milestoneLevel;
-    refreshGameState(req);
     res.redirect("/game");
 });
 
@@ -89,7 +88,7 @@ app.get("/leaderboard",
                 .sort((a, b) => b.score - a.score)
                 .slice(0, leaderboardSize),
         });
-});
+    });
 
 app.get("/guide", (req, res) => {
     res.render("guide", {
@@ -158,18 +157,18 @@ function updateCurrentQuestion(req) {
     if (req.session.currentLevel > 15 || req.session.currentQuestionsSet.length === 0) {
         endGame(req);
     } else {
-        if(req.session.currentLevel<=3)
+        if (req.session.currentLevel <= 3)
             req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["EasyQuestions"]);
-        else if(req.session.currentLevel<=8)
+        else if (req.session.currentLevel <= 8)
             req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["MediumQuestions"]);
-        else if(req.session.currentLevel<=12)
+        else if (req.session.currentLevel <= 12)
             req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["HardQuestions"]);
         else
             req.session.currentQuestion = getQuestionFromSet(req.session.currentQuestionsSet["VeryHardQuestions"]);
     }
 }
 
-function getQuestionFromSet(set){
+function getQuestionFromSet(set) {
     const nextQuestionIndex = getRandomNonNegativeInteger(set.length);
     const nextQuestion = set[nextQuestionIndex];
     set.splice(nextQuestionIndex, 1);
