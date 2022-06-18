@@ -38,6 +38,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/favicon.ico', express.static('static/images/favicon.ico'));
+app.use('/api/', isUserPlaying);
 
 app.get("/", (_, res) => {
     res.redirect('/start');
@@ -62,9 +63,11 @@ app.post("/start", (req, res) => {
 });
 
 app.get("/game", (req, res) => {
-    if (req.session.username === undefined || req.session.currentQuestion !== null)
+    if (req.session.isPlaying === undefined || req.session.isPlaying === true){
         res.redirect('/start');
+    }
     else {
+        req.session.isPlaying = true;
         updateCurrentQuestion(req);
         res.render("game", {
             layout: "default",
@@ -103,8 +106,11 @@ app.get("/guide", (req, res) => {
 });
 
 app.post("/api/answerCurrentQuestion", (req, res) => {
-    let success = answerCurrentQuestion(req);
-    if (success) updateCurrentLevel(req);
+    let success = false;
+    if (!req.session.isQuestionAnswered){
+        success = answerCurrentQuestion(req);
+        if (success) updateCurrentLevel(req);
+    }
     res.json({"success": success});
 });
 
@@ -119,7 +125,6 @@ app.get("/api/getCurrentScore", (req, res) => {
 
 app.get("/api/getFiftyFiftyAnswer", (req, res) => {
    let fiftyFiftyAnswer = null;
-   console.log(req.session);
    if (!req.session.isFiftyFiftyUsed){
        fiftyFiftyAnswer = [req.session.currentQuestion["answerIndex"],
            getRandomArrayElement(getArrayCopyWithRemovedIndex(
@@ -148,6 +153,12 @@ app.post("/api/endGame", (req, res) => {
 
 app.listen(process.env.PORT || port, () => console.log(`App listening on port ${port}`));
 
+function isUserPlaying(req, res, next){
+    if (req.session.isPlaying) next();
+    else res.status(404)
+        .send("You can not do this request when you are not playing.");
+}
+
 function isStartUserParametersValid(req){
     return (typeof req.body.username === "string") &&
         req.body.username.length <= maxUsernameLength &&
@@ -170,7 +181,7 @@ function updateLeaderboard(name, score) {
 
 function refreshGameState(req) {
     req.session.score = 0;
-    req.session.isGameOver = false;
+    req.session.isPlaying = false;
     req.session.isVictory = false;
     req.session.isFriendCallUsed = false;
     req.session.isFiftyFiftyUsed = false;
@@ -181,12 +192,8 @@ function refreshGameState(req) {
 }
 
 function answerCurrentQuestion(req){
-    let success = false;
-    if (!req.session.isQuestionAnswered && !req.session.isGameOver){
-        success = req.session.currentQuestion["answerIndex"] === req.body["answerIndex"];
-        req.session.isQuestionAnswered = true;
-    }
-    return success;
+    req.session.isQuestionAnswered = true;
+    return req.session.currentQuestion["answerIndex"] === req.body["answerIndex"];
 }
 
 function updateCurrentQuestion(req) {
@@ -215,8 +222,8 @@ function updateCurrentQuestionSet(req){
 }
 
 function endGame(req) {
-    if (req.session.isGameOver) return;
-    req.session.isGameOver = true;
+    if (!req.session.isPlaying) return;
+    req.session.isPlaying = false;
     req.session.currentQuestion = null;
     if (req.session.milestoneLevel < req.session.currentLevel) {
         if (req.session.currentLevel >= 15) req.session.isVictory = true;
