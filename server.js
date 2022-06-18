@@ -53,6 +53,7 @@ app.get("/start", (_, res) => {
 
 app.post("/start", (req, res) => {
     req.session.username = req.body.user;
+    req.session.milestoneLevel = req.body.milestoneLevel;
     refreshGameState(req);
     res.redirect("/game");
 });
@@ -147,7 +148,6 @@ function refreshGameState(req) {
     req.session.isGameOver = false;
     req.session.isVictory = false;
     req.session.currentLevel = 0;
-    req.session.milestoneLevel = req.body.milestoneLevel;
     req.session.currentQuestionsSet = questionsData;
     req.session.currentQuestion = null;
 }
