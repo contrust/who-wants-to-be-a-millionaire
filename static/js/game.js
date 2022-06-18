@@ -11,26 +11,27 @@ const totalHighlightTime = 5000;
 const orangeHighlightTime = 3000;
 const greenHighlightTime = totalHighlightTime - orangeHighlightTime;
 
-let rightAnswer = undefined;
+let rightAnswerIndex = undefined;
 let timeLeft = timeForAnswer;
 let timerId = setInterval(countdown, 1000);
 timer.innerText = `${timeForAnswer}`;
 let answerChosen = false;
 let score = 0;
 let questionNumber = 0;
+let indexesToLetters = ["A", "B", "C", "D"];
 
 
-function checkAnswer(letter) {
+function checkAnswer(chosenAnswerIndex) {
     if (answerChosen) return;
     clearTimeout(timerId);
     answerChosen = true;
-    let chosenAnswerButton = document.getElementById(`${letter}`);
-    let rightAnswerButton = document.getElementById(`${rightAnswer}`);
-    highlightAnswers(rightAnswerButton, chosenAnswerButton);
-    setTimeout(() => {
-        if (chosenAnswerButton.id === rightAnswerButton.id) {
-            updateCurrentQuestion();
-            updateCurrentScore();
+    highlightAnswers(document.getElementById(`${indexesToLetters[rightAnswerIndex]}`),
+        document.getElementById(`${indexesToLetters[chosenAnswerIndex]}`));
+    setTimeout(async () => {
+        let success = await answerCurrentQuestion(chosenAnswerIndex);
+        if (success) {
+            await updateCurrentScore();
+            await updateCurrentQuestion();
             resetTimer();
             answerChosen = false;
         } else endGame();
@@ -38,19 +39,31 @@ function checkAnswer(letter) {
 
 }
 
-function updateCurrentQuestion() {
-    fetch("/api/getNextQuestion").then(res => res.json())
+async function updateCurrentQuestion() {
+    await fetch("/api/getCurrentQuestion").then(res => res.json())
         .then((questionData) => {
             if (questionData === null) endGame();
             else {
                 questionNumber++;
-                document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold"
-                if(questionNumber>1)
-                    document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "#050553"
+                document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold";
+                if (questionNumber > 1)
+                    document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "#050553";
                 updateQuestionElementsData(questionData);
-                rightAnswer = questionData['answer'];
+                rightAnswerIndex = questionData['answerIndex'];
             }
         });
+}
+
+async function answerCurrentQuestion(answerIndex) {
+    return await fetch("/api/answerCurrentQuestion", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"answerIndex": answerIndex})
+    }).then(res => res.json())
+        .then(res => res["success"]);
 }
 
 function updateQuestionElementsData(questionData) {
@@ -61,12 +74,11 @@ function updateQuestionElementsData(questionData) {
     answerDText.innerText = questionData['choices'][3];
 }
 
-function updateCurrentScore() {
+async function updateCurrentScore() {
     fetch("/api/getCurrentScore").then((res) => {
         return res.json();
     }).then((currentScoreData) => {
         score = currentScoreData['currentScore'];
-        scoreText.innerText = score;
     });
 }
 
@@ -104,9 +116,9 @@ function endGame() {
 }
 
 document.addEventListener('click', event => {
-    if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(event.target.id);
+    if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         window.location.assign("/api/getFriendCallAnswer");
 });
 
-updateCurrentQuestion();
+updateCurrentQuestion().then();
