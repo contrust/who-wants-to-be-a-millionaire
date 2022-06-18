@@ -229,8 +229,9 @@ function popRandomArrayElement(array) {
 }
 
 function getFriendCallAnswer(questionData) {
-    if (Math.random() < friendCallRightAnswerProbability) return questionData["answerIndex"];
+    if (Math.random() < friendCallRightAnswerProbability) return questionData["choices"][questionData["answerIndex"]];
     else {
+        console.log(questionData);
         let answers = [...questionData["choices"]];
         answers.splice(questionData["answerIndex"], 1);
         return popRandomArrayElement(answers);
