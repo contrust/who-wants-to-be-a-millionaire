@@ -53,15 +53,14 @@ app.get("/start", (_, res) => {
 
 app.post("/start", (req, res) => {
     req.session.username = req.body.user;
+    refreshGameState(req);
     res.redirect("/game");
 });
 
 app.get("/game", (req, res) => {
-    if(typeof req.session.username == "undefined"){
+    if (req.session.username === undefined || req.session.currentLevel > 0)
         res.redirect('/start');
-    }
-    else{
-        refreshGameState(req);
+    else {
         res.render("game", {
             layout: "default",
             title: "Game",
