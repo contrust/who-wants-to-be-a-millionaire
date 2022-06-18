@@ -119,6 +119,8 @@ document.addEventListener('click', event => {
     if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         window.location.assign("/api/getFriendCallAnswer");
+    else if (event.target.id === 'fifty-fifty')
+        window.location.assign("/api/getFiftyFiftyAnswer");
 });
 
 updateCurrentQuestion().then();

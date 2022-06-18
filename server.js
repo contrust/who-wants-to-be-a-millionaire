@@ -117,10 +117,23 @@ app.get("/api/getCurrentScore", (req, res) => {
     res.json({"currentScore": req.session.score});
 });
 
+app.get("/api/getFiftyFiftyAnswer", (req, res) => {
+   let fiftyFiftyAnswer = null;
+   console.log(req.session);
+   if (!req.session.isFiftyFiftyUsed){
+       fiftyFiftyAnswer = [req.session.currentQuestion["answerIndex"],
+           getRandomArrayElement(getArrayCopyWithRemovedIndex(
+               Array(4).keys(),
+               req.session.currentQuestion["answerIndex"]))];
+       req.session.isFiftyFiftyUsed = true;
+   }
+   res.json({"fiftyFiftyAnswer": fiftyFiftyAnswer});
+});
+
 app.get("/api/getFriendCallAnswer", (req, res) => {
     let friendCallAnswer = null;
     if (!req.session.isFriendCallUsed) {
-        let template = friendCallTemplates[getRandomNonNegativeInteger(friendCallTemplates.length)];
+        let template = getRandomArrayElement(friendCallTemplates);
         let answer = getFriendCallAnswer(req.session.currentQuestion);
         friendCallAnswer = getFormattedFriendCallAnswer(template, answer);
         req.session.isFriendCallUsed = true;
@@ -221,9 +234,19 @@ function getFormattedFriendCallAnswer(template, answer) {
     return template.replace("*", answer);
 }
 
+function getRandomArrayElement(array) {
+    return array[getRandomNonNegativeInteger(array.length)];
+}
+
+function getArrayCopyWithRemovedIndex(array, indexToRemove){
+    let copiedArray = [...array];
+    copiedArray.splice(indexToRemove, 1);
+    return copiedArray;
+}
+
 function popRandomArrayElement(array) {
-    const randomIndex = getRandomNonNegativeInteger(array.length);
-    const randomElement = array[randomIndex];
+    let randomIndex = getRandomNonNegativeInteger(array.length);
+    let randomElement = array[randomIndex];
     array.splice(randomIndex, 1);
     return randomElement;
 }
@@ -231,10 +254,8 @@ function popRandomArrayElement(array) {
 function getFriendCallAnswer(questionData) {
     if (Math.random() < friendCallRightAnswerProbability) return questionData["choices"][questionData["answerIndex"]];
     else {
-        console.log(questionData);
-        let answers = [...questionData["choices"]];
-        answers.splice(questionData["answerIndex"], 1);
-        return popRandomArrayElement(answers);
+        return getRandomArrayElement(getArrayCopyWithRemovedIndex(
+            questionData["choices"], questionData["answerIndex"]));
     }
 }
 
