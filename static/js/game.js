@@ -24,6 +24,7 @@ let score = 0;
 let questionNumber = 0;
 let indexesToLetters = ["A", "B", "C", "D"];
 let currentQuestionData;
+let milestoneLevel;
 
 
 function checkAnswer(chosenAnswerIndex) {
@@ -59,8 +60,12 @@ async function updateCurrentQuestion() {
                 currentQuestionData = questionData;
                 questionNumber++;
                 document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold";
-                if (questionNumber > 1)
-                    document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "#050553";
+                if (questionNumber > 1){
+                    if(questionNumber-1 === milestoneLevel)
+                        document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "green";
+                    else
+                        document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "#050553";
+                }
                 updateQuestionElementsData(questionData);
                 rightAnswerIndex = questionData['answerIndex'];
             }
@@ -117,6 +122,16 @@ function fiftyFifty(){
     }).then((fiftyFiftyAnswer) => {
         removeIncorrectAnswers(fiftyFiftyAnswer["fiftyFiftyAnswer"]);
     })
+}
+
+function getMilestoneLevel(){
+    fetch("/api/getMilestoneLevel").then((res)=> {
+        return res.json();
+    }).then((milestone) =>{
+        milestoneLevel = milestone['milestone'];
+        document.getElementById(`step${milestoneLevel}`).style.backgroundColor = "green";
+        }
+    )
 }
 
 function removeIncorrectAnswers(correctAnswersIndexes){
@@ -196,5 +211,5 @@ document.addEventListener('mouseout', event=>{
         event.target.src = "static/images/black.png";
     }
 })
-
+getMilestoneLevel();
 updateCurrentQuestion().then();
