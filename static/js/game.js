@@ -4,11 +4,11 @@ const answerBText = document.getElementById('BanswerText');
 const answerCText = document.getElementById('CanswerText');
 const answerDText = document.getElementById('DanswerText');
 const scoreText = document.getElementById('score');
-const timer = document.getElementById('timer');
+const timer = document.getElementById('countdown-number');
 const friendCall = document.getElementById('friend-call');
 const timeForAnswer = 30;
-const totalHighlightTime = 5000;
-const orangeHighlightTime = 3000;
+const totalHighlightTime = 4000;
+const orangeHighlightTime = 2000;
 const greenHighlightTime = totalHighlightTime - orangeHighlightTime;
 
 let rightAnswerIndex = undefined;
