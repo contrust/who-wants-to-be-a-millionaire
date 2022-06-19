@@ -25,31 +25,6 @@ button{
     font-size: 200%;
 }
 
-.leaderboard th,.leaderboard td {
-    border: 1px solid black;
-    border-radius: 10px;
-    border-top-color: cornflowerblue;
-}
-
-#steps{
-    font-size: 10px;
-    width: 500px;
-    height: 800px;
-    position: absolute;
-    left: 70%;
-    list-style: none;
-}
-
-.step{
-    text-align: left;
-    width: 150px;
-    background-color: #050553;
-    border: 1px solid black;
-    border-radius: 10px;
-    border-top-color: cornflowerblue;
-    padding-left: 10px;
-}
-
 table{
     background-color: #050553;
 }
@@ -84,8 +59,40 @@ td, th{
     flex-direction: column;
 }
 
-#timer{
-    background-color: white;
+.leaderboard th,.leaderboard td{
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+}
+
+#steps{
+    font-size: 10px;
+    left: 70%;
+    list-style: none;
+}
+
+.step{
+    text-align: left;
+    width: 150px;
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+    padding-left: 10px;
+}
+
+#countdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: gold;
+    font-size: 70px;
+    width: 150px;
+    height: 150px;
+    background-color: #050553;
+    border: solid cornflowerblue;
+    border-radius: 50%;
+    position: relative;
 }
 
 #hints{
@@ -107,22 +114,24 @@ td, th{
 }
 
 #topHalf, #bottomHalf{
-    width: 100%;
-    height: 50vh;
+    height: 400px;
 }
 
 #topHalf{
     position: relative;
     display: flex;
-    justify-content: center;
-    max-width: 1200px;
-    min-width: 1000px;
-    height: 400px;
+    justify-content: space-evenly;
+    max-width: 1400px;
+    min-width: 800px;
+    align-items: flex-end;
+    width: 80%;
 }
 
 #bottomHalf{
-    max-height: 500px;
+    width: 100%;
 }
+
+
 
 #question{
     display: flex;
@@ -138,7 +147,7 @@ td, th{
     width: 60%;
     height: 20%;
     min-height: 100px;
-    min-width: 900px;
+    min-width: 800px;
     max-width: 1600px;
     max-height: 100px;
     background-image: url("../images/quest.png");
@@ -183,7 +192,7 @@ td, th{
     max-width: 1200px;
     max-height: 250px;
     min-height: 180px;
-    min-width: 800px;
+    min-width: 600px;
 
 }
 
@@ -191,8 +200,8 @@ td, th{
     color: white;
     position: absolute;
     margin: 0;
-    top: 18%;
-    left: 30%;
+    top: 25%;
+    left: 22%;
     font-size: 25px;
 }
 
@@ -204,13 +213,12 @@ td, th{
     display: flex;
     justify-content: center;
     height: 25%;
-    width: 50%;
+    width: 40%;
     min-height: 60px;
-    min-width: 350px;
 }
 
 .answerImg{
-    width: 70%;
+    width: 100%;
     height: 100%;
 }
 
@@ -218,8 +226,8 @@ td, th{
     position: relative;
     color: #f8db22;
     font-size: 25px;
-    left: 10%;
-    top: -23%;
+    left: 15%;
+    top: -16%;
 }
 
 #LBname{
