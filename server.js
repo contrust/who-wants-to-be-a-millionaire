@@ -48,7 +48,9 @@ app.get("/start", (req, res) => {
     refreshGameState(req);
     res.render("start", {
         layout: "default",
-        title: "Start"
+        title: "Start",
+        username: req.session.username || "",
+        milestoneLevel: req.session.milestoneLevel || 1
     });
 });
 
