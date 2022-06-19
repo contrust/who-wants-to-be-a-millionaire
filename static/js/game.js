@@ -23,6 +23,7 @@ let friendCallUsed = false;
 let score = 0;
 let questionNumber = 0;
 let indexesToLetters = ["A", "B", "C", "D"];
+let currentQuestionData;
 
 
 function checkAnswer(chosenAnswerIndex) {
@@ -46,6 +47,7 @@ function checkAnswer(chosenAnswerIndex) {
 async function updateCurrentQuestion() {
     if(fiftyFiftyUsedOnPrevQuestion){
         fiftyFiftyUsedOnPrevQuestion = false;
+        indexesToLetters = ["A", "B", "C", "D"];
         for(let i = 0; i<4; i++){
             document.getElementById(`${indexesToLetters[i]}Button`).style.removeProperty( 'display' );
         }
@@ -54,6 +56,7 @@ async function updateCurrentQuestion() {
         .then((questionData) => {
             if (questionData === null) endGame();
             else {
+                currentQuestionData = questionData;
                 questionNumber++;
                 document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold";
                 if (questionNumber > 1)
@@ -112,12 +115,28 @@ function fiftyFifty(){
     fetch("/api/getFiftyFiftyAnswer").then((res) =>{
         return res.json();
     }).then((fiftyFiftyAnswer) => {
-        for(let i = 0; i<4; i++){
-            if(fiftyFiftyAnswer["fiftyFiftyAnswer"].includes(i))
-                continue;
-            document.getElementById(`${indexesToLetters[i]}Button`).style.display = "none";
-        }
+        removeIncorrectAnswers(fiftyFiftyAnswer["fiftyFiftyAnswer"]);
     })
+}
+
+function removeIncorrectAnswers(correctAnswersIndexes){
+    for(let i = 0; i<4; i++){
+        if(correctAnswersIndexes.includes(i))
+            continue;
+        document.getElementById(`${indexesToLetters[i]}Button`).style.display = "none";
+    }
+    indexesToLetters = [
+        indexesToLetters[correctAnswersIndexes[0]],
+        indexesToLetters[correctAnswersIndexes[1]]
+    ];
+    let rightAnswer = currentQuestionData["choices"][currentQuestionData["answerIndex"]];
+    currentQuestionData["choices"] = [
+        currentQuestionData["choices"][correctAnswersIndexes[0]],
+        currentQuestionData["choices"][correctAnswersIndexes[1]]
+    ];
+    currentQuestionData["answerIndex"] = currentQuestionData["choices"].findIndex((x) => x === rightAnswer);
+    rightAnswerIndex =  currentQuestionData["answerIndex"];
+    console.log(indexesToLetters);
 }
 
 function friendCall(){

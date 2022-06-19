@@ -138,16 +138,11 @@ app.get("/api/getCurrentScore", (req, res) => {
 app.get("/api/getFiftyFiftyAnswer", (req, res) => {
    let fiftyFiftyAnswer = null;
    if (!req.session.isFiftyFiftyUsed){
-       let rightAnswer = req.session.currentQuestion.choices[req.session.currentQuestion["answerIndex"]];
        fiftyFiftyAnswer = [req.session.currentQuestion["answerIndex"],
            getRandomArrayElement(getArrayCopyWithRemovedIndex(
                Array(4).keys(),
                req.session.currentQuestion["answerIndex"]))];
-       req.session.currentQuestion["choices"] = [
-           req.session.currentQuestion["choices"][fiftyFiftyAnswer[0]],
-           req.session.currentQuestion["choices"][fiftyFiftyAnswer[1]]
-       ];
-       req.session.currentQuestion["answerIndex"] = req.session.currentQuestion["choices"].findIndex((x) => x === rightAnswer);
+       removeIncorrectAnswers(req, fiftyFiftyAnswer);
        req.session.isFiftyFiftyUsed = true;
    }
    res.json({"fiftyFiftyAnswer": fiftyFiftyAnswer});
@@ -296,5 +291,14 @@ function getFriendCallAnswer(questionData, probability) {
         return getRandomArrayElement(getArrayCopyWithRemovedIndex(
             questionData["choices"], questionData["answerIndex"]));
     }
+}
+
+function removeIncorrectAnswers(req, correctAnswersIndexes){
+    let rightAnswer = req.session.currentQuestion.choices[req.session.currentQuestion["answerIndex"]];
+    req.session.currentQuestion["choices"] = [
+        req.session.currentQuestion["choices"][correctAnswersIndexes[0]],
+        req.session.currentQuestion["choices"][correctAnswersIndexes[1]]
+    ];
+    req.session.currentQuestion["answerIndex"] = req.session.currentQuestion["choices"].findIndex((x) => x === rightAnswer);
 }
 
