@@ -29,6 +29,10 @@ button{
     font-size: 200%;
 }
 
+button:hover{
+    font-size: 215%;
+}
+
 .ruleBlock {
     background-color: #050553;
     border: 1px solid black;
@@ -48,7 +52,7 @@ button{
     width: 70%;
 }
 
-finalMessage{
+.finalMessage{
     background-color: #050553;
     border: 1px solid black;
     border-radius: 10px;
@@ -57,7 +61,7 @@ finalMessage{
     width: 70%;
 }
 
-finalScore{
+.finalScore{
     background-color: #431343;
     border: 1px solid black;
     border-radius: 10px;
@@ -159,11 +163,26 @@ td, th{
 }
 
 #fifty-fifty{
+    width: 75px;
+    height: 55px;
     background-image: url("../images/5050.png");
+    background-repeat: no-repeat;
+}
+
+#fifty-fifty:hover{
+    background-image: url("../images/hover5050.png");
+
 }
 
 #friend-call{
+    width: 75px;
+    height: 55px;
     background-image: url("../images/call.png");
+    background-repeat: no-repeat;
+}
+
+#friend-call:hover{
+    background-image: url("../images/hoverCall.png");
 }
 
 .modal {
@@ -370,6 +389,9 @@ td, th{
     margin-top: 50px;
     height: 100px;
     background-color: #431343;
+}
+#startGame:hover{
+    font-size: 55px;
 }
 
 
