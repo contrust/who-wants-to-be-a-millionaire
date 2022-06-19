@@ -25,6 +25,24 @@ button{
     font-size: 200%;
 }
 
+ruleBlock{
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-size: 150%;
+    width: 70%;
+}
+
+gigaRuleBlock{
+    background-color: #050593;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-size: 300%;
+    width: 70%;
+}
+
 table{
     background-color: #050553;
 }
