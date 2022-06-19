@@ -186,13 +186,13 @@ document.addEventListener('click', event => {
 });
 
 document.addEventListener('mouseover', event=>{
-    if (indexesToLetters.includes(event.target.id)){
+    if (!answerChosen && indexesToLetters.includes(event.target.id)){
         event.target.src = "static/images/orange.png";
     }
 })
 
 document.addEventListener('mouseout', event=>{
-    if (indexesToLetters.includes(event.target.id)){
+    if (!answerChosen && indexesToLetters.includes(event.target.id)){
         event.target.src = "static/images/black.png";
     }
 })
