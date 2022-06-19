@@ -30,7 +30,7 @@ button{
 }
 
 button:hover{
-    font-size: 215%;
+    font-size: 205%;
 }
 
 .ruleBlock {
@@ -401,7 +401,7 @@ td, th{
     background-color: #431343;
 }
 #startGame:hover{
-    font-size: 55px;
+    font-size: 51px;
 }
 
 
