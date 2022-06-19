@@ -98,7 +98,7 @@ async function updateCurrentScore() {
 function highlightAnswers(rightAnswerButton, chosenAnswerButton) {
     chosenAnswerButton.src = "static/images/orange.png";
     setTimeout(() => {
-        rightAnswerButton.src = "static/images/green.png"
+        rightAnswerButton.src = "static/images/green.png";
         setTimeout(() => {
             chosenAnswerButton.src = "static/images/black.png";
             rightAnswerButton.src = "static/images/black.png";
@@ -156,7 +156,11 @@ function friendCall(){
 function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
-        setTimeout(async () => {await endGame();}, 1000);
+        setTimeout(() => {
+            document.getElementById(`${indexesToLetters[rightAnswerIndex]}`).src =  "static/images/green.png";
+            setTimeout(async () => {await endGame();}, 3000);
+        }, 1000);
+
     } else {
         timer.innerText = `${--timeLeft}`;
     }
