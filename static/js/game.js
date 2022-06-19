@@ -117,8 +117,8 @@ function endGame() {
 }
 
 document.addEventListener('click', event => {
-    if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
-    else if (["AanswerText", "BanswerText", "CanswerText", "DanswerText"].includes(event.target.id)) checkAnswer(indexesToAnswers.indexOf(event.target.id));
+    if (indexesToLetters.includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
+    else if (indexesToAnswers.includes(event.target.id)) checkAnswer(indexesToAnswers.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         window.location.assign("/api/getFriendCallAnswer");
     else if (event.target.id === 'fifty-fifty')
