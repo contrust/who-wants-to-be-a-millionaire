@@ -35,15 +35,15 @@ function checkAnswer(chosenAnswerIndex) {
             await updateCurrentQuestion();
             resetTimer();
             answerChosen = false;
-        } else endGame();
+        } else await endGame();
     }, totalHighlightTime);
 
 }
 
 async function updateCurrentQuestion() {
     await fetch("/api/getCurrentQuestion").then(res => res.json())
-        .then((questionData) => {
-            if (questionData === null) endGame();
+        .then(async (questionData) => {
+            if (questionData === null) await endGame();
             else {
                 questionNumber++;
                 document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold";
@@ -97,9 +97,7 @@ function highlightAnswers(rightAnswerButton, chosenAnswerButton) {
 function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
-        setTimeout(() => {
-            return window.location.assign("/score");
-        }, 1000);
+        setTimeout(async () => {await endGame();}, 1000);
     } else {
         timer.innerText = `${--timeLeft}`;
     }
@@ -111,8 +109,8 @@ function resetTimer() {
     timerId = setInterval(countdown, 1000);
 }
 
-function endGame() {
-    fetch('/api/endGame', {method: 'POST'})
+async function endGame() {
+    return fetch('/api/endGame', {method: 'POST'})
         .then(() => window.location.assign("/score"));
 }
 
