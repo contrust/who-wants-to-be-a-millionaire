@@ -45,7 +45,7 @@ button{
 }
 
 finalMessage{
-    background-color: #3505f0;
+    background-color: #050553;
     border: 1px solid black;
     border-radius: 10px;
     color: white;
@@ -54,7 +54,7 @@ finalMessage{
 }
 
 finalScore{
-    background-color: #8505f0;
+    background-color: #431343;
     border: 1px solid black;
     border-radius: 10px;
     color: white;
