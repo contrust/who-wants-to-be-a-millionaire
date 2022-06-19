@@ -1,4 +1,4 @@
-<div class="finalmessage" id="message">
+<div class="finalmessage">
     {{#if isVictory}}
         Поздравляем, {{username}}, ты ответил на все вопросы, ты такой cool!!!
     {{else}}
@@ -6,9 +6,9 @@
     {{/if}}
 </div>
 <br>
-<div class="finalscore" id="score">
+<div class="finalscore">
     Счёт: {{score}}
 </div>
 <br><br><br><br><br><br><br><br><br>
-<button onclick="location.href = '/leaderboard'">Таблице лидеров</button>
-<button onclick="location.href = '/start'">Стартовое меню</button>
+<button class="pageButton" onclick="location.href = '/leaderboard'">Таблица лидеров</button>
+<button class="pageButton" onclick="location.href = '/start'">Стартовое меню</button>

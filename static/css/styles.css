@@ -70,6 +70,10 @@ button:hover{
     width: 25%;
 }
 
+.clickable:hover{
+    cursor: pointer;
+}
+
 table{
     background-color: #050553;
 }
@@ -126,15 +130,17 @@ td, th{
     padding-left: 10px;
 }
 
-#username{
-    margin-top: 105px;
+#username, #milestoneLevel {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
 }
 
-#user, #milestoneLevel{
-    background-color : skyblue;
+#usernameInput, #milestoneLevelInput{
+    background-color : midnightblue;
     height: 40px;
     font-size: 30px;
-    padding-top: 1.25%;
+    color: white;
 }
 
 
@@ -322,11 +328,11 @@ td, th{
     font-size: 25px;
 }
 
-#AanswerText, #BanswerText, #CanswerText, #DanswerText{
+#AAnswerText, #BAnswerText, #CAnswerText, #DAnswerText{
     pointer-events: none;
 }
 
-.Answer{
+.answer{
     position: absolute;
     display: flex;
     justify-content: center;
@@ -349,14 +355,14 @@ td, th{
     pointer-events: none;
 }
 
-#LBname{
+#LbName{
     width: 40vw;
     max-width: 800px;
     text-align: left;
     padding-left: 10px;
 }
 
-#LBscore{
+#LbScore{
     width: 20vw;
     max-width: 400px;
 }
@@ -376,12 +382,16 @@ td, th{
     width: 20vw;
 }
 
-#toStartButton{
+.pageButton{
     width: 20vw;
     max-width: 600px;
     min-width: 200px;
     min-height: 120px;
     height: 5vw;
+}
+
+.clickable:hover, .pageButton:hover{
+    cursor: pointer;
 }
 
 #startGame{

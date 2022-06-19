@@ -3,9 +3,9 @@
         <div id="countdown-number"></div>
     </div>
     <div id="hints">
-        <div class="hint" id="fifty-fifty">
+        <div class="hint clickable" id="fifty-fifty">
         </div>
-        <div class="hint" id="friend-call">
+        <div class="hint clickable" id="friend-call">
         </div>
     </div>
     <ul id="steps">
@@ -32,25 +32,25 @@
             <p class="text" id="questionText"></p>
         </div>
         <div id="answers">
-            <div id="AButton" class='Answer'>
+            <div id="AButton" class='answer clickable'>
                 <p class="letter" id="letterA">A:</p>
-                <img class="answerImg" id="A" src="/static/images/black.png">
-                <p class="answerText" id="AanswerText"></p>
+                <img class="answerImg" id="A" src="/static/images/black.png" alt="A">
+                <p class="answerText" id="AAnswerText"></p>
             </div>
-            <div id="BButton" class='Answer'>
+            <div id="BButton" class='answer clickable'>
                 <p class="letter" id="letterB">B:</p>
-                <img class="answerImg" id="B" src="/static/images/black.png">
-                <p class="answerText" id="BanswerText"></p>
+                <img class="answerImg" id="B" src="/static/images/black.png" alt="B">
+                <p class="answerText" id="BAnswerText"></p>
             </div>
-            <div id="CButton" class='Answer'>
+            <div id="CButton" class='answer clickable'>
                 <p class="letter" id="letterC">C:</p>
-                <img class="answerImg" id="C" src="/static/images/black.png">
-                <p class="answerText" id="CanswerText"></p>
+                <img class="answerImg" id="C" src="/static/images/black.png" alt="C">
+                <p class="answerText" id="CAnswerText"></p>
             </div>
-            <div id="DButton" class='Answer'>
+            <div id="DButton" class='answer clickable'>
                 <p class="letter" id="letterD">D:</p>
-                <img class="answerImg" id="D" src="/static/images/black.png">
-                <p class="answerText" id="DanswerText"></p>
+                <img class="answerImg" id="D" src="/static/images/black.png" alt="D">
+                <p class="answerText" id="DAnswerText"></p>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
             <h1 id="friendCallTitle">Звонок другу</h1>
             <p id="friendCallText">Содержимое модального окна...</p>
         </div>
-        <div id="close">
+        <div id="close" class="clickable">
             <button id="closeFriendCallButton" onclick="friendCallWindow.style.display = 'none'">Закрыть</button>
         </div>
     </div>
