@@ -78,7 +78,7 @@ app.post("/start", (req, res) => {
 });
 
 app.get("/game", (req, res) => {
-    if (req.session.isPlaying === undefined || req.session.isPlaying === true){
+    if (req.session.isPlaying === undefined || req.session.isPlaying === true || req.session.currentQuestion !== null){
         res.redirect('/start');
     }
     else {
@@ -252,7 +252,6 @@ function updateDifficulty(req){
 function endGame(req) {
     if (!req.session.isPlaying) return;
     req.session.isPlaying = false;
-    req.session.currentQuestion = null;
     if (req.session.milestoneLevel < req.session.currentLevel) {
         if (req.session.currentLevel >= 15) req.session.isVictory = true;
         else req.session.score = levelsPrices[Math.min(req.session.milestoneLevel, 15)];
