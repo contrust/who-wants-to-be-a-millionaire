@@ -143,7 +143,7 @@ function friendCall(){
     if(friendCallUsed)
         return;
     friendCallUsed = true;
-    friendCallButton.style.backgroundImage =  "url('static/images/UsedCall.png')"
+    friendCallButton.style.backgroundImage =  "url('static/images/usedCall.png')"
     fetch("/api/getFriendCallAnswer").then((res) =>
     {
         return res.json();
@@ -169,7 +169,7 @@ function resetTimer() {
 }
 
 async function endGame() {
-    return fetch('/api/endGame', {method: 'POST'})
+    return await fetch('/api/endGame', {method: 'POST'})
         .then(() => window.location.assign("/score"));
 }
 
