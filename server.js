@@ -162,6 +162,11 @@ app.get("/api/getFriendCallAnswer", (req, res) => {
     res.json({"friendCallAnswer": friendCallAnswer});
 });
 
+app.get("/api/getMilestoneLevel", (req, res) =>{
+    console.log(req.session.milestoneLevel);
+    res.json({'milestone': req.session.milestoneLevel});
+})
+
 app.post("/api/endGame", (req, res) => {
     endGame(req);
     res.json({});
