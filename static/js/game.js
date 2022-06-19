@@ -175,7 +175,7 @@ async function endGame() {
 
 document.addEventListener('click', event => {
     if (indexesToLetters.includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
-    else if (indexesToAnswers.includes(event.target.id)) checkAnswer(indexesToAnswers.indexOf(event.target.id));
+    else if (indexesToLetters.includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         friendCall();
     else if (event.target.id === 'fifty-fifty')
