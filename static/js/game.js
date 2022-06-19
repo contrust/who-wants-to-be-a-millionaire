@@ -187,7 +187,7 @@ document.addEventListener('click', event => {
 
 document.addEventListener('mouseover', event=>{
     if (!answerChosen && indexesToLetters.includes(event.target.id)){
-        event.target.src = "static/images/orange.png";
+        event.target.src = "static/images/hoverAns.png";
     }
 })
 
