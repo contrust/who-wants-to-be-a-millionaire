@@ -111,7 +111,7 @@ function fiftyFifty(){
         return;
     fiftyFiftyUsed = true;
     fiftyFiftyUsedOnPrevQuestion = true;
-    fiftyFiftyButton.style.backgroundImage =  "url('static/images/Used5050.png')";
+    fiftyFiftyButton.style.backgroundImage =  "url('static/images/used5050.png')";
     fetch("/api/getFiftyFiftyAnswer").then((res) =>{
         return res.json();
     }).then((fiftyFiftyAnswer) => {
