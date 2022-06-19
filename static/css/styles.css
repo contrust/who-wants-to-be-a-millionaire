@@ -118,6 +118,10 @@ td, th{
     padding-left: 10px;
 }
 
+#username{
+    margin-top: 105px;
+}
+
 #user, #milestoneLevel{
     background-color : skyblue;
     height: 40px;
@@ -355,6 +359,13 @@ td, th{
     min-width: 200px;
     min-height: 120px;
     height: 5vw;
+}
+
+#startGame{
+    font-size: 50px;
+    margin-top: 50px;
+    height: 100px;
+    background-color: #431343;
 }
 
 

@@ -1,12 +1,11 @@
 <form class="form" method="post">
-    <label class="title" for="user">Ваше имя:
+    <label class="title" id="username" for="user">Ваше имя:
         <input id="user" name="username" type="text" maxlength="{{maxUsernameLength}}" value="{{username}}" required>
     </label>
     <label class="title">Номер вопроса с несгораемой суммой:
         <input id="milestoneLevel" name="milestoneLevel" type="number" value="{{milestoneLevel}}" required min="1" max="14">
     </label>
-
-
+    <br><br><br>
     <button class="action" type="submit" id="startGame">Начать игру</button>
 </form>
 <button onclick="location.href = '/leaderboard'">Перейти к таблице лидеров</button>
