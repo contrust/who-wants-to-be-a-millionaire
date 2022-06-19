@@ -39,7 +39,7 @@ function checkAnswer(chosenAnswerIndex) {
             await updateCurrentQuestion();
             resetTimer();
             answerChosen = false;
-        } else endGame();
+        } else await endGame();
     }, totalHighlightTime);
 
 }
@@ -53,8 +53,8 @@ async function updateCurrentQuestion() {
         }
     }
     await fetch("/api/getCurrentQuestion").then(res => res.json())
-        .then((questionData) => {
-            if (questionData === null) endGame();
+        .then(async (questionData) => {
+            if (questionData === null) await endGame();
             else {
                 currentQuestionData = questionData;
                 questionNumber++;
@@ -156,9 +156,7 @@ function friendCall(){
 function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
-        setTimeout(() => {
-            return window.location.assign("/score");
-        }, 1000);
+        setTimeout(async () => {await endGame();}, 1000);
     } else {
         timer.innerText = `${--timeLeft}`;
     }
@@ -170,13 +168,14 @@ function resetTimer() {
     timerId = setInterval(countdown, 1000);
 }
 
-function endGame() {
-    fetch('/api/endGame', {method: 'POST'})
+async function endGame() {
+    return fetch('/api/endGame', {method: 'POST'})
         .then(() => window.location.assign("/score"));
 }
 
 document.addEventListener('click', event => {
-    if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
+    if (indexesToLetters.includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
+    else if (indexesToAnswers.includes(event.target.id)) checkAnswer(indexesToAnswers.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         friendCall();
     else if (event.target.id === 'fifty-fifty')

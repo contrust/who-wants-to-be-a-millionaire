@@ -1,7 +1,7 @@
 #main{
     position: absolute;
     background-image: url("../images/background.png");
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-color: black;
     min-width: 100%;
     min-height: 100vh;
@@ -23,6 +23,42 @@ button{
     border-top-color: cornflowerblue;
     color: white;
     font-size: 200%;
+}
+
+ruleBlock {
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-size: 150%;
+    width: 70%;
+}
+
+gigaRuleBlock{
+    background-color: #050593;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-size: 300%;
+    width: 70%;
+}
+
+finalMessage{
+    background-color: #3505f0;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-size: 300%;
+    width: 70%;
+}
+
+finalScore{
+    background-color: #8505f0;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-size: 300%;
+    width: 25%;
 }
 
 table{
@@ -80,6 +116,14 @@ td, th{
     border-top-color: cornflowerblue;
     padding-left: 10px;
 }
+
+#user, #milestoneLevel{
+    background-color : skyblue;
+    height: 40px;
+    font-size: 30px;
+    padding-top: 1.25%;
+}
+
 
 #countdown {
     display: flex;
