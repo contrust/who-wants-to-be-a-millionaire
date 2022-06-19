@@ -114,6 +114,12 @@ td, th{
     border-top-color: cornflowerblue;
 }
 
+input:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 10px white;
+}
+
 #steps{
     font-size: 10px;
     left: 70%;
