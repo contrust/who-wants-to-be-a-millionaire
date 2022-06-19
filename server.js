@@ -126,7 +126,7 @@ app.post("/api/answerCurrentQuestion", (req, res) => {
         success = answerCurrentQuestion(req);
         if (success) updateCurrentLevel(req);
     }
-    res.json({"success": success});
+    res.json({"success": success && req.session.isPlaying});
 });
 
 
