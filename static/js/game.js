@@ -107,7 +107,7 @@ function highlightAnswers(rightAnswerButton, chosenAnswerButton) {
 }
 
 function fiftyFifty(){
-    if(fiftyFiftyUsed)
+    if(fiftyFiftyUsed || answerChosen)
         return;
     fiftyFiftyUsed = true;
     fiftyFiftyUsedOnPrevQuestion = true;
@@ -140,7 +140,7 @@ function removeIncorrectAnswers(correctAnswersIndexes){
 }
 
 function friendCall(){
-    if(friendCallUsed)
+    if(friendCallUsed || answerChosen)
         return;
     friendCallUsed = true;
     friendCallButton.style.backgroundImage =  "url('static/images/UsedCall.png')"
