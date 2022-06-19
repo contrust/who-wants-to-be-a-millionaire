@@ -81,6 +81,14 @@ td, th{
     padding-left: 10px;
 }
 
+#user, #milestoneLevel{
+    background-color : skyblue;
+    height: 40px;
+    font-size: 30px;
+    padding-top: 1.25%;
+}
+
+
 #countdown {
     display: flex;
     justify-content: center;
