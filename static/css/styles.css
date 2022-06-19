@@ -1,6 +1,10 @@
 #main{
     position: absolute;
     background-image: url("../images/background.png");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     background-repeat: repeat;
     background-color: black;
     min-width: 100%;
