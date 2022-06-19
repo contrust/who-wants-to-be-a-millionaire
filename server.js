@@ -5,15 +5,27 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const questionsFilePath = './static/questions/questions.json';
 const leaderboardPath = './static/leaderboard/leaderboard.json';
-const friendCallTemplatesPath = "./static/templates/friendCallTemplates.txt";
+const friendCallTemplatesEasyPath = "./static/templates/friendCallTemplatesEasy.txt";
+const friendCallTemplatesMediumPath = "./static/templates/friendCallTemplatesMedium.txt";
+const friendCallTemplatesHardPath = "./static/templates/friendCallTemplatesHard.txt";
 const leaderboardSize = 10;
 const port = 3000;
 const maxUsernameLength = 28;
-const friendCallRightAnswerProbability = 0.5;
+
+const friendCallRightAnswerProbability = { "easy": 0.9, "normal": 0.6, "hard": 0.4, "expert": 0.25}
+let friendCallTemplatesEasy = fs.readFileSync(friendCallTemplatesEasyPath, "utf-8").split(/\r?\n/);
+let friendCallTemplatesNormal = fs.readFileSync(friendCallTemplatesMediumPath, "utf-8").split(/\r?\n/);
+let friendCallTemplatesHard = fs.readFileSync(friendCallTemplatesHardPath, "utf-8").split(/\r?\n/);
+let friendCallTemplates = {
+    "easy": friendCallTemplatesEasy,
+    "normal": friendCallTemplatesNormal,
+    "hard": friendCallTemplatesHard,
+    "expert": friendCallTemplatesHard
+};
 
 let questions = require(questionsFilePath)["questions"];
 let leaderboard = require(leaderboardPath);
-let friendCallTemplates = fs.readFileSync(friendCallTemplatesPath, "utf-8").split(/\r?\n/);
+
 let levelsPrices = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000];
 
 
@@ -126,10 +138,16 @@ app.get("/api/getCurrentScore", (req, res) => {
 app.get("/api/getFiftyFiftyAnswer", (req, res) => {
    let fiftyFiftyAnswer = null;
    if (!req.session.isFiftyFiftyUsed){
+       let rightAnswer = req.session.currentQuestion.choices[req.session.currentQuestion["answerIndex"]];
        fiftyFiftyAnswer = [req.session.currentQuestion["answerIndex"],
            getRandomArrayElement(getArrayCopyWithRemovedIndex(
                Array(4).keys(),
                req.session.currentQuestion["answerIndex"]))];
+       req.session.currentQuestion["choices"] = [
+           req.session.currentQuestion["choices"][fiftyFiftyAnswer[0]],
+           req.session.currentQuestion["choices"][fiftyFiftyAnswer[1]]
+       ];
+       req.session.currentQuestion["answerIndex"] = req.session.currentQuestion["choices"].findIndex((x) => x === rightAnswer);
        req.session.isFiftyFiftyUsed = true;
    }
    res.json({"fiftyFiftyAnswer": fiftyFiftyAnswer});
@@ -138,8 +156,8 @@ app.get("/api/getFiftyFiftyAnswer", (req, res) => {
 app.get("/api/getFriendCallAnswer", (req, res) => {
     let friendCallAnswer = null;
     if (!req.session.isFriendCallUsed) {
-        let template = getRandomArrayElement(friendCallTemplates);
-        let answer = getFriendCallAnswer(req.session.currentQuestion);
+        let template = getRandomArrayElement(friendCallTemplates[req.session.difficulty]);
+        let answer = getFriendCallAnswer(req.session.currentQuestion, friendCallRightAnswerProbability[req.session.difficulty]);
         friendCallAnswer = getFormattedFriendCallAnswer(template, answer);
         req.session.isFriendCallUsed = true;
     }
@@ -202,7 +220,7 @@ function updateCurrentQuestion(req) {
         req.session.currentQuestionsSet.length === 0) {
         endGame(req);
     } else {
-        updateCurrentQuestionSet(req);
+        updateDifficulty(req);
         req.session.currentQuestion = popRandomArrayElement(req.session.currentQuestionsSet);
         req.session.isQuestionAnswered = false;
     }
@@ -214,11 +232,23 @@ function updateCurrentLevel(req){
     updateCurrentQuestion(req);
 }
 
-function updateCurrentQuestionSet(req){
-    if (req.session.currentLevel === 1) req.session.currentQuestionsSet = [...questions["easy"]];
-    else if (req.session.currentLevel === 5) req.session.currentQuestionsSet = [...questions["normal"]];
-    else if (req.session.currentLevel === 9) req.session.currentQuestionsSet = [...questions["hard"]];
-    else if (req.session.currentLevel === 13) req.session.currentQuestionsSet = [...questions["expert"]];
+function updateDifficulty(req){
+    if (req.session.currentLevel === 1) {
+        req.session.currentQuestionsSet = [...questions["easy"]];
+        req.session.difficulty = "easy"
+    }
+    else if (req.session.currentLevel === 5){
+        req.session.currentQuestionsSet = [...questions["normal"]];
+        req.session.difficulty = "normal"
+    }
+    else if (req.session.currentLevel === 9) {
+        req.session.currentQuestionsSet = [...questions["hard"]];
+        req.session.difficulty = "hard"
+    }
+    else if (req.session.currentLevel === 13) {
+        req.session.currentQuestionsSet = [...questions["expert"]];
+        req.session.difficulty = "expert"
+    }
 }
 
 function endGame(req) {
@@ -258,8 +288,10 @@ function popRandomArrayElement(array) {
     return randomElement;
 }
 
-function getFriendCallAnswer(questionData) {
-    if (Math.random() < friendCallRightAnswerProbability) return questionData["choices"][questionData["answerIndex"]];
+function getFriendCallAnswer(questionData, probability) {
+    let rand = Math.random();
+    console.log(`random: ${rand}`);
+    if (rand< probability) return questionData["choices"][questionData["answerIndex"]];
     else {
         return getRandomArrayElement(getArrayCopyWithRemovedIndex(
             questionData["choices"], questionData["answerIndex"]));

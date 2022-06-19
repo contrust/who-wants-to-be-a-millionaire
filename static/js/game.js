@@ -3,9 +3,10 @@ const answerAText = document.getElementById('AanswerText');
 const answerBText = document.getElementById('BanswerText');
 const answerCText = document.getElementById('CanswerText');
 const answerDText = document.getElementById('DanswerText');
-const scoreText = document.getElementById('score');
 const timer = document.getElementById('countdown-number');
-const friendCall = document.getElementById('friend-call');
+const friendCallButton = document.getElementById('friend-call');
+const fiftyFiftyButton = document.getElementById("fifty-fifty");
+const friendCallWindow = document.getElementById('openModal');
 const timeForAnswer = 30;
 const totalHighlightTime = 4000;
 const orangeHighlightTime = 2000;
@@ -16,6 +17,9 @@ let timeLeft = timeForAnswer;
 let timerId = setInterval(countdown, 1000);
 timer.innerText = `${timeForAnswer}`;
 let answerChosen = false;
+let fiftyFiftyUsed = false;
+let fiftyFiftyUsedOnPrevQuestion = false;
+let friendCallUsed = false;
 let score = 0;
 let questionNumber = 0;
 let indexesToLetters = ["A", "B", "C", "D"];
@@ -40,6 +44,12 @@ function checkAnswer(chosenAnswerIndex) {
 }
 
 async function updateCurrentQuestion() {
+    if(fiftyFiftyUsedOnPrevQuestion){
+        fiftyFiftyUsedOnPrevQuestion = false;
+        for(let i = 0; i<4; i++){
+            document.getElementById(`${indexesToLetters[i]}Button`).style.removeProperty( 'display' );
+        }
+    }
     await fetch("/api/getCurrentQuestion").then(res => res.json())
         .then((questionData) => {
             if (questionData === null) endGame();
@@ -93,6 +103,37 @@ function highlightAnswers(rightAnswerButton, chosenAnswerButton) {
     }, orangeHighlightTime);
 }
 
+function fiftyFifty(){
+    if(fiftyFiftyUsed)
+        return;
+    fiftyFiftyUsed = true;
+    fiftyFiftyUsedOnPrevQuestion = true;
+    fiftyFiftyButton.style.backgroundImage =  "url('static/images/Used5050.png')";
+    fetch("/api/getFiftyFiftyAnswer").then((res) =>{
+        return res.json();
+    }).then((fiftyFiftyAnswer) => {
+        for(let i = 0; i<4; i++){
+            if(fiftyFiftyAnswer["fiftyFiftyAnswer"].includes(i))
+                continue;
+            document.getElementById(`${indexesToLetters[i]}Button`).style.display = "none";
+        }
+    })
+}
+
+function friendCall(){
+    if(friendCallUsed)
+        return;
+    friendCallUsed = true;
+    friendCallButton.style.backgroundImage =  "url('static/images/UsedCall.png')"
+    fetch("/api/getFriendCallAnswer").then((res) =>
+    {
+        return res.json();
+    }).then((friendCallAnswer) => {
+        document.getElementById('friendCallText').textContent = friendCallAnswer["friendCallAnswer"];
+        friendCallWindow.style.display = "flex";
+    })
+}
+
 function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
@@ -118,9 +159,9 @@ function endGame() {
 document.addEventListener('click', event => {
     if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
-        window.location.assign("/api/getFriendCallAnswer");
+        friendCall();
     else if (event.target.id === 'fifty-fifty')
-        window.location.assign("/api/getFiftyFiftyAnswer");
+        fiftyFifty();
 });
 
 updateCurrentQuestion().then();

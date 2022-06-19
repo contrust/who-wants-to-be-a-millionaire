@@ -8,7 +8,7 @@
         <div class="hint" id="friend-call">
         </div>
     </div>
-    <ul id="steps" reversed>
+    <ul id="steps">
         <li class="text step" id="step15">15. 1 000 000</li>
         <li class="text step" id="step14">14. 500 000</li>
         <li class="text step" id="step13">13. 250 000</li>
@@ -52,6 +52,17 @@
                 <img class="answerImg" id="D" src="/static/images/black.png">
                 <p class="answerText" id="DanswerText"></p>
             </div>
+        </div>
+    </div>
+</div>
+<div id="openModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <h1 id="friendCallTitle">Звонок другу</h1>
+            <p id="friendCallText">Содержимое модального окна...</p>
+        </div>
+        <div id="close">
+            <button id="closeFriendCallButton" onclick="friendCallWindow.style.display = 'none'">Закрыть</button>
         </div>
     </div>
 </div>

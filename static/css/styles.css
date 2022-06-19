@@ -113,6 +113,51 @@ td, th{
     background-image: url("../images/call.png");
 }
 
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1050;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+    position: fixed;
+    width: 50%;
+    height: 30%;
+    min-width: 700px;
+    min-height: 300px;
+    max-width: 1000px;
+    max-height: 500px;
+    background-color: #050553;
+    border: 1px solid black;
+    border-radius: 10px;
+    border-top-color: cornflowerblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.modal-body {
+    width: 80%;
+    height: 80%;
+    position: relative;
+    font-size: 30px;
+    color: white;
+}
+#friendCallTitle{
+    font-size: 40px;
+}
+
 #topHalf, #bottomHalf{
     height: 400px;
 }
@@ -206,6 +251,7 @@ td, th{
 }
 
 #AanswerText, #BanswerText, #CanswerText, #DanswerText{
+    pointer-events: none;
 }
 
 .Answer{
@@ -228,6 +274,7 @@ td, th{
     font-size: 25px;
     left: 15%;
     top: -16%;
+    pointer-events: none;
 }
 
 #LBname{
