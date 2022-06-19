@@ -179,11 +179,22 @@ async function endGame() {
 
 document.addEventListener('click', event => {
     if (indexesToLetters.includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
-    else if (indexesToLetters.includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         friendCall();
     else if (event.target.id === 'fifty-fifty')
         fiftyFifty();
 });
+
+document.addEventListener('mouseover', event=>{
+    if (indexesToLetters.includes(event.target.id)){
+        event.target.src = "static/images/orange.png";
+    }
+})
+
+document.addEventListener('mouseout', event=>{
+    if (indexesToLetters.includes(event.target.id)){
+        event.target.src = "static/images/black.png";
+    }
+})
 
 updateCurrentQuestion().then();
