@@ -4,11 +4,11 @@ const answerBText = document.getElementById('BanswerText');
 const answerCText = document.getElementById('CanswerText');
 const answerDText = document.getElementById('DanswerText');
 const scoreText = document.getElementById('score');
-const timer = document.getElementById('timer');
+const timer = document.getElementById('countdown-number');
 const friendCall = document.getElementById('friend-call');
 const timeForAnswer = 30;
-const totalHighlightTime = 5000;
-const orangeHighlightTime = 3000;
+const totalHighlightTime = 4000;
+const orangeHighlightTime = 2000;
 const greenHighlightTime = totalHighlightTime - orangeHighlightTime;
 
 let rightAnswerIndex = undefined;
@@ -19,6 +19,7 @@ let answerChosen = false;
 let score = 0;
 let questionNumber = 0;
 let indexesToLetters = ["A", "B", "C", "D"];
+let indexesToAnswers = ["AanswerText", "BanswerText", "CanswerText", "DanswerText"]
 
 
 function checkAnswer(chosenAnswerIndex) {
@@ -117,6 +118,7 @@ function endGame() {
 
 document.addEventListener('click', event => {
     if (["A", "B", "C", "D"].includes(event.target.id)) checkAnswer(indexesToLetters.indexOf(event.target.id));
+    else if (["AanswerText", "BanswerText", "CanswerText", "DanswerText"].includes(event.target.id)) checkAnswer(indexesToAnswers.indexOf(event.target.id));
     else if (event.target.id === 'friend-call')
         window.location.assign("/api/getFriendCallAnswer");
     else if (event.target.id === 'fifty-fifty')
