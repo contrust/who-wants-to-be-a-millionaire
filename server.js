@@ -50,7 +50,8 @@ app.get("/start", (req, res) => {
         layout: "default",
         title: "Start",
         username: req.session.username || "",
-        milestoneLevel: req.session.milestoneLevel || 1
+        milestoneLevel: req.session.milestoneLevel || 1,
+        maxUsernameLength: maxUsernameLength
     });
 });
 

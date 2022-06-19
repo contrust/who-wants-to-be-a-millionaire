@@ -1,6 +1,6 @@
 <form class="form" method="post">
     <label class="title" for="user">Ваше имя:
-        <input id="user" name="username" type="text" maxlength="28" value="{{username}}" required>
+        <input id="user" name="username" type="text" maxlength="{{maxUsernameLength}}" value="{{username}}" required>
     </label>
     <label class="title">Номер вопроса с несгораемой суммой:
         <input id="milestoneLevel" name="milestoneLevel" type="number" value="{{milestoneLevel}}" required min="1" max="14">
