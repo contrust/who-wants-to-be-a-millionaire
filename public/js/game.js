@@ -36,7 +36,6 @@ function checkAnswer(chosenAnswerIndex) {
     setTimeout(async () => {
         let success = await answerCurrentQuestion(chosenAnswerIndex);
         if (success) {
-            await updateCurrentScore();
             await updateCurrentQuestion();
             resetTimer();
             answerChosen = false;
@@ -46,25 +45,25 @@ function checkAnswer(chosenAnswerIndex) {
 }
 
 async function updateCurrentQuestion() {
-    if(fiftyFiftyUsedOnPrevQuestion){
+    if (fiftyFiftyUsedOnPrevQuestion) {
         fiftyFiftyUsedOnPrevQuestion = false;
         indexesToLetters = ["A", "B", "C", "D"];
-        for(let i = 0; i<4; i++){
-            document.getElementById(`${indexesToLetters[i]}Button`).style.removeProperty( 'display' );
+        for (let i = 0; i < 4; i++) {
+            document.getElementById(`${indexesToLetters[i]}Button`).style.removeProperty('display');
         }
     }
-    await fetch("/api/getCurrentQuestion").then(res => res.json())
+    await fetch("/api/question").then(res => res.json())
         .then(async (questionData) => {
             if (questionData === null) await endGame();
             else {
                 currentQuestionData = questionData;
                 questionNumber++;
                 document.getElementById(`step${questionNumber}`).style.backgroundColor = "gold";
-                if (questionNumber > 1){
-                    if(questionNumber-1 === milestoneLevel)
-                        document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "green";
+                if (questionNumber > 1) {
+                    if (questionNumber - 1 === milestoneLevel)
+                        document.getElementById(`step${questionNumber - 1}`).style.backgroundColor = "green";
                     else
-                        document.getElementById(`step${questionNumber-1}`).style.backgroundColor = "#050553";
+                        document.getElementById(`step${questionNumber - 1}`).style.backgroundColor = "#050553";
                 }
                 updateQuestionElementsData(questionData);
                 rightAnswerIndex = questionData['answerIndex'];
@@ -73,7 +72,7 @@ async function updateCurrentQuestion() {
 }
 
 async function answerCurrentQuestion(answerIndex) {
-    return await fetch("/api/answerCurrentQuestion", {
+    return await fetch("/api/question/answer", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -92,51 +91,43 @@ function updateQuestionElementsData(questionData) {
     answerDText.innerText = questionData['choices'][3];
 }
 
-async function updateCurrentScore() {
-    fetch("/api/getCurrentScore").then((res) => {
-        return res.json();
-    }).then((currentScoreData) => {
-        score = currentScoreData['currentScore'];
-    });
-}
-
 function highlightAnswers(rightAnswerButton, chosenAnswerButton) {
-    chosenAnswerButton.src = "static/images/orange.png";
+    chosenAnswerButton.src = "public/images/orange.png";
     setTimeout(() => {
-        rightAnswerButton.src = "static/images/green.png";
+        rightAnswerButton.src = "public/images/green.png";
         setTimeout(() => {
-            chosenAnswerButton.src = "static/images/black.png";
-            rightAnswerButton.src = "static/images/black.png";
+            chosenAnswerButton.src = "public/images/black.png";
+            rightAnswerButton.src = "public/images/black.png";
         }, greenHighlightTime)
     }, orangeHighlightTime);
 }
 
-function fiftyFifty(){
-    if(fiftyFiftyUsed || answerChosen)
+function fiftyFifty() {
+    if (fiftyFiftyUsed || answerChosen)
         return;
     fiftyFiftyUsed = true;
     fiftyFiftyUsedOnPrevQuestion = true;
-    fiftyFiftyButton.style.backgroundImage =  "url('static/images/used5050.png')";
-    fetch("/api/getFiftyFiftyAnswer").then((res) =>{
+    fiftyFiftyButton.style.backgroundImage = "url('public/images/used5050.png')";
+    fetch("/api/hints/fiftyFifty").then((res) => {
         return res.json();
     }).then((fiftyFiftyAnswer) => {
         removeIncorrectAnswers(fiftyFiftyAnswer["fiftyFiftyAnswer"]);
     })
 }
 
-function getMilestoneLevel(){
-    fetch("/api/getMilestoneLevel").then((res)=> {
+function getMilestoneLevel() {
+    fetch("/api/milestone").then((res) => {
         return res.json();
-    }).then((milestone) =>{
-        milestoneLevel = milestone['milestone'];
-        document.getElementById(`step${milestoneLevel}`).style.backgroundColor = "green";
+    }).then((milestone) => {
+            milestoneLevel = milestone['milestone'];
+            document.getElementById(`step${milestoneLevel}`).style.backgroundColor = "green";
         }
     )
 }
 
-function removeIncorrectAnswers(correctAnswersIndexes){
-    for(let i = 0; i<4; i++){
-        if(correctAnswersIndexes.includes(i))
+function removeIncorrectAnswers(correctAnswersIndexes) {
+    for (let i = 0; i < 4; i++) {
+        if (correctAnswersIndexes.includes(i))
             continue;
         document.getElementById(`${indexesToLetters[i]}Button`).style.display = "none";
     }
@@ -150,17 +141,16 @@ function removeIncorrectAnswers(correctAnswersIndexes){
         currentQuestionData["choices"][correctAnswersIndexes[1]]
     ];
     currentQuestionData["answerIndex"] = currentQuestionData["choices"].findIndex((x) => x === rightAnswer);
-    rightAnswerIndex =  currentQuestionData["answerIndex"];
+    rightAnswerIndex = currentQuestionData["answerIndex"];
     console.log(indexesToLetters);
 }
 
-function friendCall(){
-    if(friendCallUsed || answerChosen)
+function friendCall() {
+    if (friendCallUsed || answerChosen)
         return;
     friendCallUsed = true;
-    friendCallButton.style.backgroundImage =  "url('static/images/usedCall.png')"
-    fetch("/api/getFriendCallAnswer").then((res) =>
-    {
+    friendCallButton.style.backgroundImage = "url('public/images/usedCall.png')"
+    fetch("/api/hints/friendCall").then((res) => {
         return res.json();
     }).then((friendCallAnswer) => {
         document.getElementById('friendCallText').textContent = friendCallAnswer["friendCallAnswer"];
@@ -172,8 +162,10 @@ function countdown() {
     if (timeLeft === 0) {
         clearTimeout(timerId);
         setTimeout(() => {
-            document.getElementById(`${indexesToLetters[rightAnswerIndex]}`).src =  "static/images/green.png";
-            setTimeout(async () => {await endGame();}, 3000);
+            document.getElementById(`${indexesToLetters[rightAnswerIndex]}`).src = "public/images/green.png";
+            setTimeout(async () => {
+                await endGame();
+            }, 3000);
         }, 1000);
 
     } else {
@@ -188,7 +180,7 @@ function resetTimer() {
 }
 
 async function endGame() {
-    return await fetch('/api/endGame', {method: 'POST'})
+    return await fetch('/api/game/end', {method: 'POST'})
         .then(() => window.location.assign("/score"));
 }
 
@@ -200,15 +192,15 @@ document.addEventListener('click', event => {
         fiftyFifty();
 });
 
-document.addEventListener('mouseover', event=>{
-    if (!answerChosen && indexesToLetters.includes(event.target.id)){
-        event.target.src = "static/images/hoverAns.png";
+document.addEventListener('mouseover', event => {
+    if (!answerChosen && indexesToLetters.includes(event.target.id)) {
+        event.target.src = "public/images/hoverAns.png";
     }
 })
 
-document.addEventListener('mouseout', event=>{
-    if (!answerChosen && indexesToLetters.includes(event.target.id)){
-        event.target.src = "static/images/black.png";
+document.addEventListener('mouseout', event => {
+    if (!answerChosen && indexesToLetters.includes(event.target.id)) {
+        event.target.src = "public/images/black.png";
     }
 })
 getMilestoneLevel();
