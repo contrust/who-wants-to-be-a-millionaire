@@ -1,5 +1,5 @@
 const levelsPrices = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000];
-const levelsCount = levelsPrices.length;
+const levelsCount = levelsPrices.length - 1;
 
 module.exports = {
     port: 3000,
