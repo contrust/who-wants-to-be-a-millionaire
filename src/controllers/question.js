@@ -15,7 +15,7 @@ function updateDifficulty(req){
         req.session.currentQuestionsSet = [...storageObjects.getQuestions(req.session.difficulty)];
     }
     else if (req.session.currentLevel === 5){
-        req.session.difficulty = "normal";
+        req.session.difficulty = "medium";
         req.session.currentQuestionsSet = [...storageObjects.getQuestions(req.session.difficulty)];
     }
     else if (req.session.currentLevel === 9) {
