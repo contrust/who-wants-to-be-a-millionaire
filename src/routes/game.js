@@ -1,11 +1,12 @@
 const gameState = require("../controllers/game.js");
-const leaderboard = require("../storage/objects.js");
+const common = require("./common");
 const express = require("express");
 
 let router = express.Router();
 
 router.post("/end", (req, res) => {
-    gameState.endGame(req, leaderboard);
+    gameState.endGame(req);
+    common.renderScoreAfterEnd(req);
     res.json({});
 });
 

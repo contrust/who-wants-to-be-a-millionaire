@@ -10,6 +10,17 @@ function getLeaderBoard(){
     return JSON.parse(fs.readFileSync(constrains.leaderboardPath, 'utf-8'));
 }
 
+function updateLeaderBoard (name, score) {
+    const leaderboard = getLeaderBoard();
+    if (name in leaderboard) {
+        if (leaderboard[name].score >= score) return;
+        leaderboard[name].score = score;
+    } else leaderboard[name] = {name: name, score: score};
+    fs.writeFile(constrains.leaderboardPath, JSON.stringify(leaderboard), (err) => {
+        if (err) return console.log(err);
+    });
+}
+
 function getFriendCallTemplates(difficulty){
     return fs.readFileSync(path.join(constrains.friendCallTemplatesPath, `${difficulty}.txt`), "utf-8").split(/\r?\n/);
 }
@@ -17,5 +28,6 @@ function getFriendCallTemplates(difficulty){
 module.exports = {
     getQuestions: getQuestions,
     getLeaderBoard: getLeaderBoard,
+    updateLeaderBoard: updateLeaderBoard,
     getFriendCallTemplates: getFriendCallTemplates
 }

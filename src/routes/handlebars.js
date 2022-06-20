@@ -4,6 +4,7 @@ const validation = require("../controllers/validation.js");
 const question = require("../controllers/question.js");
 const storageObjects = require("../storage/objects.js");
 const express = require("express");
+const {getQuestions} = require("../storage/objects");
 
 let router = express.Router();
 
@@ -34,7 +35,8 @@ router.get("/game", (req, res) => {
     }
     else {
         req.session.isPlaying = true;
-        question.updateCurrentQuestion(req, storageObjects.questions, storageObjects.leaderboard);
+        req.session.currentQuestionsSet = [...getQuestions(req.session.difficulty)];
+        question.updateCurrentQuestion(req);
         res.render("game", {
             layout: "default",
             title: "Game",
