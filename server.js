@@ -29,7 +29,7 @@ app.set("view engine", "hbs");
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: "7&NT0c#_myc9!!p[==_",
+    secret: process.env.SECRET
 }));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
